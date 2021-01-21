@@ -35,6 +35,7 @@
 #include <omnetpp.h>
 #include "JUtil.h"
 
+namespace omnetpp {
 
 /**
  * Implements a message class that can be extended in Java.
@@ -65,6 +66,8 @@ class JMessage : public cMessage, public JObjectAccess
 
     // Also note methods inherited from JObjectAccess: getIntJavaField(), etc.
 };
+
+}
 
 #endif
 

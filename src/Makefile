@@ -51,7 +51,6 @@ DIST_SRC_FILES = \
     JSimpleModule.ned \
     JUtil.cc \
     JUtil.h \
-    Makefile.vc \
     Makefile
 
 # the following files are not distributed by default
@@ -63,6 +62,7 @@ EXPERIMENTAL_SRC_FILES = \
 
 all: dist
 
+# Use SWIG and scripts to generate C++ files (and Java interface files)
 $(GENERATED_FILES) : Simkernel.i Makefile $(OMNETPP_ROOT)/include/*.h  # and many oher things
 	-mkdir -p $(OUTDIR)/java
 	-mkdir -p $(OUTDIR)/java/org
@@ -77,6 +77,7 @@ $(GENERATED_FILES) : Simkernel.i Makefile $(OMNETPP_ROOT)/include/*.h  # and man
 	@# $(PERL) patchownership.pl $(JAVADIR)
 	@# $(PERL) patchcastfrom.pl $(JAVADIR)
 
+# Compile Java files
 javafiles:
 	@# cp ProxyObjectMap.java.in java/org/omnetpp/simkernel/ProxyObjectMap.java
 	find $(JAVADIR) -name '*.java' >listfile.tmp
@@ -85,6 +86,7 @@ javafiles:
 	$(JAVAC) -sourcepath $(OUTDIR)/java -d $(CLASSDIR) @listfile.tmp
 	-rm listfile.tmp
 
+# Copy files into destination
 dist: $(GENERATED_FILES) javafiles
 	-mkdir $(DISTDIR)
 	$(JAR) cvf $(DISTDIR)/simkernel.jar -C $(CLASSDIR) org

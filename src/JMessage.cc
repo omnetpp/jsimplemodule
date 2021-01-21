@@ -29,6 +29,7 @@
 #include "JMessage.h"
 #include "JUtil.h"
 
+using namespace omnetpp;
 using namespace JUtil;  // for jenv, checkExceptions(), findMethod(), etc
 
 

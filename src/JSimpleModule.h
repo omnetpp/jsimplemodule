@@ -35,6 +35,8 @@
 #include <omnetpp.h>
 #include "JUtil.h"
 
+namespace omnetpp {
+
 /**
  * Implements a Java-based simple module. It instantiates the Java class
  * based on the module's fully qualified name, and delegates handleMessage()
@@ -74,6 +76,8 @@ class JSimpleModule : public cSimpleModule, public JObjectAccess
     virtual void handleMessage(cMessage *msg);
     virtual void finish();
 };
+
+}
 
 #endif
 

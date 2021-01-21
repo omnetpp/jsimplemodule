@@ -34,6 +34,8 @@
 #include <assert.h>
 #include <omnetpp.h>
 
+namespace omnetpp {
+
 /**
  * Convenience methods for working with JNI.
  */
@@ -90,6 +92,8 @@ class JObjectAccess
     void setDoubleJavaField(const char *fieldName, jdouble value);
     void setStringJavaField(const char *fieldName, const char *value);
 };
+
+}
 
 #endif
 

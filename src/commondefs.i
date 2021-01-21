@@ -45,7 +45,7 @@
 /*--------------------------------------------------------------------------
  * int32 <--> int mapping
  *--------------------------------------------------------------------------*/
-%include "platdep/intxtypes.h"
+%include "omnetpp/platdep/intlimits.h"
 
 %typemap(jni)    int32_t "jint"
 %typemap(jtype)  int32_t "int"

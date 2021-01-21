@@ -104,21 +104,22 @@
 %ignore operator double;
 %ignore operator long double;
 %ignore operator void *;
-%ignore operator cOwnedObject *;
-%ignore operator cXMLElement *;
-%ignore cSimulation::operator=;
-%ignore cEnvir::printf;
+%ignore operator omnetpp::cOwnedObject *;
+%ignore operator omnetpp::cXMLElement *;
+%ignore omnetpp::cSimulation::operator=;
+%ignore omnetpp::cEnvir::printf;
 
 // ignore methods that are useless from Java
-%ignore processMessage;  //cChannel
-%ignore netPack;
-%ignore netUnpack;
-%ignore doPacking;
-%ignore doUnpacking;
-%ignore saveToFile;
-%ignore loadFromFile;
-%ignore createWatch;
-%ignore opp_typename;
+%ignore omnetpp::processMessage;  //cChannel
+%ignore omnetpp::cChannel::processMessage;  //cChannel
+%ignore omnetpp::netPack;
+%ignore omnetpp::netUnpack;
+%ignore omnetpp::doPacking;
+%ignore omnetpp::doUnpacking;
+%ignore omnetpp::saveToFile;
+%ignore omnetpp::loadFromFile;
+%ignore omnetpp::createWatch;
+%ignore omnetpp::opp_typename;
 
 // ignore non-inspectable classes and those that cause problems
 %ignore eMessageKind;
@@ -140,194 +141,197 @@
 %ignore cStaticFlag;
 %ignore ExecuteOnStartup;
 
-%typemap(javacode) cModule %{
+%typemap(javacode) omnetpp::cModule %{
   public static cEnvir ev = Simkernel.getEv();
 %};
 
-%typemap(javacode) Simkernel %{
+%typemap(javacode) omnetpp::Simkernel %{
   public static cEnvir ev = getEv();
 %};
 
-%ignore cObject::getDescriptor;
-%ignore cObject::createDescriptor;
-%ignore cObject::info(char *buf);
+%ignore omnetpp::cObject::getDescriptor;
+%ignore omnetpp::cObject::createDescriptor;
+%ignore omnetpp::cObject::info(char *buf);
 
-%ignore cOwnedObject::cmpbyname;
-%ignore cOwnedObject::removeFromOwnershipTree;
-%ignore cOwnedObject::setDefaultOwner;
+%ignore omnetpp::cOwnedObject::cmpbyname;
+%ignore omnetpp::cOwnedObject::removeFromOwnershipTree;
+%ignore omnetpp::cOwnedObject::setDefaultOwner;
 
-%ignore cMsgPar::setDoubleValue(ExprElem *, int);
-%ignore cMsgPar::setDoubleValue(cStatistic *);
-%ignore cMsgPar::setDoubleValue(MathFuncNoArg);
-%ignore cMsgPar::setDoubleValue(MathFunc1Arg, double);
-%ignore cMsgPar::setDoubleValue(MathFunc2Args, double, double);
-%ignore cMsgPar::setDoubleValue(MathFunc3Args, double, double, double);
-%ignore cMsgPar::setDoubleValue(MathFunc4Args, double, double, double, double);
-%ignore cMsgPar::setPointerValue;
-%ignore cMsgPar::getPointerValue;
-%ignore cMsgPar::configPointer;
-%ignore cMsgPar::operator=(void *);
-%ignore cMsgPar::operator=(long double);
-%ignore cMsgPar::cmpbyvalue;
+%ignore omnetpp::cMsgPar::setDoubleValue(ExprElem *, int);
+%ignore omnetpp::cMsgPar::setDoubleValue(cStatistic *);
+%ignore omnetpp::cMsgPar::setDoubleValue(MathFuncNoArg);
+%ignore omnetpp::cMsgPar::setDoubleValue(MathFunc1Arg, double);
+%ignore omnetpp::cMsgPar::setDoubleValue(MathFunc2Args, double, double);
+%ignore omnetpp::cMsgPar::setDoubleValue(MathFunc3Args, double, double, double);
+%ignore omnetpp::cMsgPar::setDoubleValue(MathFunc4Args, double, double, double, double);
+%ignore omnetpp::cMsgPar::setPointerValue;
+%ignore omnetpp::cMsgPar::getPointerValue;
+%ignore omnetpp::cMsgPar::configPointer;
+%ignore omnetpp::cMsgPar::operator=(void *);
+%ignore omnetpp::cMsgPar::operator=(long double);
+%ignore omnetpp::cMsgPar::cmpbyvalue;
 
-%ignore cDefaultList::doGC;
+%ignore omnetpp::cDefaultList::doGC;
 
-%ignore cComponent::setRNGMap;
-%ignore cComponent::addPar;
+%ignore omnetpp::cComponent::setRNGMap;
+%ignore omnetpp::cComponent::addPar;
+%ignore omnetpp::cComponent::getSignalMask;
 
-%ignore cModule::pause_in_sendmsg;
-%ignore cModule::lastmodulefullpath;
-%ignore cModule::lastmodulefullpathmod;
-%ignore cModule::gatev;
-%ignore cModule::paramv;
-%ignore cModule::setRNGMap;
-%ignore cModule::rng;
+%ignore omnetpp::cModule::pause_in_sendmsg;
+%ignore omnetpp::cModule::lastmodulefullpath;
+%ignore omnetpp::cModule::lastmodulefullpathmod;
+%ignore omnetpp::cModule::gatev;
+%ignore omnetpp::cModule::paramv;
+%ignore omnetpp::cModule::setRNGMap;
+%ignore omnetpp::cModule::rng;
+%ignore omnetpp::cModule::getParentModule;
 
-%ignore cSimpleModule::pause;
-%ignore cSimpleModule::receive;
-%ignore cSimpleModule::hasStackOverflow;
-%ignore cSimpleModule::getStackSize;
-%ignore cSimpleModule::getStackUsage;
+%ignore omnetpp::cSimpleModule::pause;
+%ignore omnetpp::cSimpleModule::receive;
+%ignore omnetpp::cSimpleModule::hasStackOverflow;
+%ignore omnetpp::cSimpleModule::getStackSize;
+%ignore omnetpp::cSimpleModule::getStackUsage;
 
-%ignore cMessage::setContextPointer;
-%ignore cMessage::getContextPointer;
-%ignore cMessage::getInsertOrder;
+%ignore omnetpp::cMessage::setContextPointer;
+%ignore omnetpp::cMessage::getContextPointer;
+%ignore omnetpp::cMessage::getInsertOrder;
 
-%ignore cChannel::cChannel(const char *, cChannelType *);
-%ignore cChannel::channelType;
+%ignore omnetpp::cChannel::cChannel(const char *, cChannelType *);
+%ignore omnetpp::cChannel::channelType;
 
-%ignore cQueue::setup;
-%ignore cQueue::cQueue(const char *, CompareFunc);
-%ignore cQueue::cQueue(const char *, CompareFunc, bool);
+%ignore omnetpp::cQueue::setup;
+%ignore omnetpp::cQueue::cQueue(const char *, CompareFunc);
+%ignore omnetpp::cQueue::cQueue(const char *, CompareFunc, bool);
 
-%ignore cOutVector::setCallback;
+%ignore omnetpp::cOutVector::setCallback;
 
-%ignore cSimulation::msgQueue;
-%ignore cSimulation::getMessageQueue;
-%ignore cSimulation::setScheduler;
-%ignore cSimulation::getScheduler;
-%ignore cSimulation::getHasher;
-%ignore cSimulation::setHasher;
-%ignore cSimulation::setupNetwork;
-%ignore cSimulation::startRun;
-%ignore cSimulation::callFinish;
-%ignore cSimulation::endRun;
-%ignore cSimulation::deleteNetwork;
-%ignore cSimulation::transferTo;
-%ignore cSimulation::transferToMain;
-%ignore cSimulation::setGlobalContext;
-%ignore cSimulation::setContext;
-%ignore cSimulation::getNetworkType;
-%ignore cSimulation::registerModule;
-%ignore cSimulation::deregisterModule;
-%ignore cSimulation::setSystemModule;
-%ignore cSimulation::loadNedFile;
-%ignore cSimulation::setSimTime;
-%ignore cSimulation::selectNextModule;
-%ignore cSimulation::guessNextEvent;
-%ignore cSimulation::guessNextModule;
-%ignore cSimulation::guessNextSimtime;
-%ignore cSimulation::doOneEvent;
-%ignore cSimulation::setContextModule;
-%ignore cSimulation::setContextType;
+%ignore omnetpp::cSimulation::msgQueue;
+%ignore omnetpp::cSimulation::getMessageQueue;
+%ignore omnetpp::cSimulation::setScheduler;
+%ignore omnetpp::cSimulation::getScheduler;
+%ignore omnetpp::cSimulation::getHasher;
+%ignore omnetpp::cSimulation::setHasher;
+%ignore omnetpp::cSimulation::setupNetwork;
+%ignore omnetpp::cSimulation::startRun;
+%ignore omnetpp::cSimulation::callFinish;
+%ignore omnetpp::cSimulation::endRun;
+%ignore omnetpp::cSimulation::deleteNetwork;
+%ignore omnetpp::cSimulation::transferTo;
+%ignore omnetpp::cSimulation::transferToMain;
+%ignore omnetpp::cSimulation::setGlobalContext;
+%ignore omnetpp::cSimulation::setContext;
+%ignore omnetpp::cSimulation::getNetworkType;
+%ignore omnetpp::cSimulation::registerModule;
+%ignore omnetpp::cSimulation::deregisterModule;
+%ignore omnetpp::cSimulation::setSystemModule;
+%ignore omnetpp::cSimulation::loadNedFile;
+%ignore omnetpp::cSimulation::setSimTime;
+%ignore omnetpp::cSimulation::selectNextModule;
+%ignore omnetpp::cSimulation::guessNextEvent;
+%ignore omnetpp::cSimulation::guessNextModule;
+%ignore omnetpp::cSimulation::guessNextSimtime;
+%ignore omnetpp::cSimulation::doOneEvent;
+%ignore omnetpp::cSimulation::setContextModule;
+%ignore omnetpp::cSimulation::setContextType;
 
-%ignore cStatistic::td;
-%ignore cStatistic::ra;
-%ignore cStatistic::addTransientDetection;
-%ignore cStatistic::addAccuracyDetection;
-%ignore cStatistic::getTransientDetectionObject;
-%ignore cStatistic::getAccuracyDetectionObject;
+%ignore omnetpp::cStatistic::td;
+%ignore omnetpp::cStatistic::ra;
+%ignore omnetpp::cStatistic::addTransientDetection;
+%ignore omnetpp::cStatistic::addAccuracyDetection;
+%ignore omnetpp::cStatistic::getTransientDetectionObject;
+%ignore omnetpp::cStatistic::getAccuracyDetectionObject;
+%ignore omnetpp::cStatistic::getWeights; //ignore as this throws an error
 
-%ignore cDisplayString::setRoleToConnection;
-%ignore cDisplayString::setRoleToModule;
-%ignore cDisplayString::setRoleToModuleBackground;
+%ignore omnetpp::cDisplayString::setRoleToConnection;
+%ignore omnetpp::cDisplayString::setRoleToModule;
+%ignore omnetpp::cDisplayString::setRoleToModuleBackground;
 
-%ignore cXMLElement::getDocumentElementByPath;
-%ignore cXMLElement::getElementByPath;
+%ignore omnetpp::cXMLElement::getDocumentElementByPath;
+%ignore omnetpp::cXMLElement::getElementByPath;
 
-%ignore cObjectFactory::cObjectFactory;
+%ignore omnetpp::cObjectFactory::cObjectFactory;
 
 
 // ignore deprecated methods
-%ignore cChannelType::createIdealChannel;
-%ignore cChannelType::createDelayChannel;
-%ignore cChannelType::createDatarateChannel;
-%ignore cMsgPar::getAsText;
-%ignore cMsgPar::setFromText;
-%ignore cMsgPar::setFromText;
+%ignore omnetpp::cChannelType::createIdealChannel;
+%ignore omnetpp::cChannelType::createDelayChannel;
+%ignore omnetpp::cChannelType::createDatarateChannel;
+%ignore omnetpp::cMsgPar::getAsText;
+%ignore omnetpp::cMsgPar::setFromText;
+%ignore omnetpp::cMsgPar::setFromText;
 
 // ignore cEnvir methods that are not for model code
-%ignore cEnvir::disable_tracing;
-%ignore cEnvir::suppress_notifications;
-%ignore cEnvir::debug_on_errors;
-%ignore cEnvir::objectDeleted;
-%ignore cEnvir::simulationEvent;
-%ignore cEnvir::messageSent_OBSOLETE;
-%ignore cEnvir::messageScheduled;
-%ignore cEnvir::messageCancelled;
-%ignore cEnvir::beginSend;
-%ignore cEnvir::messageSendDirect;
-%ignore cEnvir::messageSendHop;
-%ignore cEnvir::endSend;
-%ignore cEnvir::messageDeleted;
-%ignore cEnvir::moduleReparented;
-%ignore cEnvir::componentMethodBegin;
-%ignore cEnvir::componentMethodEnd;
-%ignore cEnvir::moduleCreated;
-%ignore cEnvir::moduleDeleted;
-%ignore cEnvir::gateCreated;
-%ignore cEnvir::gateDeleted;
-%ignore cEnvir::connectionCreated;
-%ignore cEnvir::connectionDeleted;
-%ignore cEnvir::displayStringChanged;
-%ignore cEnvir::undisposedObject;
-%ignore cEnvir::bubble;
-%ignore cEnvir::readParameter;
-%ignore cEnvir::isModuleLocal;
-%ignore cEnvir::getRNGMappingFor;
-%ignore cEnvir::registerOutputVector;
-%ignore cEnvir::deregisterOutputVector;
-%ignore cEnvir::setVectorAttribute;
-%ignore cEnvir::recordInOutputVector;
-%ignore cEnvir::recordScalar;
-%ignore cEnvir::recordStatistic;
-%ignore cEnvir::getStreamForSnapshot;
-%ignore cEnvir::releaseStreamForSnapshot;
-%ignore cEnvir::getArgCount;
-%ignore cEnvir::getArgVector;
-%ignore cEnvir::idle;
-%ignore cEnvir::getOStream;
-%ignore cEnvir::getConfig;
-%ignore cEnvir::getConfigEx;
+%ignore omnetpp::cEnvir::disable_tracing;
+%ignore omnetpp::cEnvir::suppress_notifications;
+%ignore omnetpp::cEnvir::debug_on_errors;
+%ignore omnetpp::cEnvir::objectDeleted;
+%ignore omnetpp::cEnvir::simulationEvent;
+%ignore omnetpp::cEnvir::messageSent_OBSOLETE;
+%ignore omnetpp::cEnvir::messageScheduled;
+%ignore omnetpp::cEnvir::messageCancelled;
+%ignore omnetpp::cEnvir::beginSend;
+%ignore omnetpp::cEnvir::messageSendDirect;
+%ignore omnetpp::cEnvir::messageSendHop;
+%ignore omnetpp::cEnvir::endSend;
+%ignore omnetpp::cEnvir::messageDeleted;
+%ignore omnetpp::cEnvir::moduleReparented;
+%ignore omnetpp::cEnvir::componentMethodBegin;
+%ignore omnetpp::cEnvir::componentMethodEnd;
+%ignore omnetpp::cEnvir::moduleCreated;
+%ignore omnetpp::cEnvir::moduleDeleted;
+%ignore omnetpp::cEnvir::gateCreated;
+%ignore omnetpp::cEnvir::gateDeleted;
+%ignore omnetpp::cEnvir::connectionCreated;
+%ignore omnetpp::cEnvir::connectionDeleted;
+%ignore omnetpp::cEnvir::displayStringChanged;
+%ignore omnetpp::cEnvir::undisposedObject;
+%ignore omnetpp::cEnvir::bubble;
+%ignore omnetpp::cEnvir::readParameter;
+%ignore omnetpp::cEnvir::isModuleLocal;
+%ignore omnetpp::cEnvir::getRNGMappingFor;
+%ignore omnetpp::cEnvir::registerOutputVector;
+%ignore omnetpp::cEnvir::deregisterOutputVector;
+%ignore omnetpp::cEnvir::setVectorAttribute;
+%ignore omnetpp::cEnvir::recordInOutputVector;
+%ignore omnetpp::cEnvir::recordScalar;
+%ignore omnetpp::cEnvir::recordStatistic;
+%ignore omnetpp::cEnvir::getStreamForSnapshot;
+%ignore omnetpp::cEnvir::releaseStreamForSnapshot;
+%ignore omnetpp::cEnvir::getArgCount;
+%ignore omnetpp::cEnvir::getArgVector;
+%ignore omnetpp::cEnvir::idle;
+%ignore omnetpp::cEnvir::getOStream;
+%ignore omnetpp::cEnvir::getConfig;
+%ignore omnetpp::cEnvir::getConfigEx;
 
-%ignore cCoroutine;
-%ignore cRunnableEnvir;
-%ignore cConfiguration;
-%ignore cConfigurationEx;
+%ignore omnetpp::cCoroutine;
+%ignore omnetpp::cRunnableEnvir;
+%ignore omnetpp::cConfiguration;
+%ignore omnetpp::cConfigurationEx;
 
-%ignore cPar::setImpl;
-%ignore cPar::impl;
-%ignore cPar::copyIfShared;
+%ignore omnetpp::cPar::setImpl;
+%ignore omnetpp::cPar::impl;
+%ignore omnetpp::cPar::copyIfShared;
 
-%ignore cRNG::initialize;
-%ignore cLCG32;
-%ignore cMersenneTwister;
+%ignore omnetpp::cRNG::initialize;
+%ignore omnetpp::cLCG32;
+%ignore omnetpp::cMersenneTwister;
 
 
 namespace std {
    specialize_std_map_on_both(std::string,,,,std::string,,,);
-   //specialize_std_vector(cXMLElement*);
+   //specialize_std_vector(omnetpp::cXMLElement*);
 
    %template(StringMap) map<string,string>;
 
-   %ignore vector<cXMLElement*>::vector;
-   %ignore vector<cXMLElement*>::resize;
-   %ignore vector<cXMLElement*>::reserve;
-   %ignore vector<cXMLElement*>::capacity;
-   %ignore vector<cXMLElement*>::clear;
-   %ignore vector<cXMLElement*>::add;  //XXX this one doesn't work (because it was added later in Java)
-   %ignore vector<cXMLElement*>::set;
-   %template(cXMLElementVector) vector<cXMLElement*>;
+   %ignore vector<omnetpp::cXMLElement*>::vector;
+   %ignore vector<omnetpp::cXMLElement*>::resize;
+   %ignore vector<omnetpp::cXMLElement*>::reserve;
+   %ignore vector<omnetpp::cXMLElement*>::capacity;
+   %ignore vector<omnetpp::cXMLElement*>::clear;
+   %ignore vector<omnetpp::cXMLElement*>::add;  //XXX this one doesn't work (because it was added later in Java)
+   %ignore vector<omnetpp::cXMLElement*>::set;
+   %template(cXMLElementVector) vector<omnetpp::cXMLElement*>;
 
    // std::vector<const char*> is only used as return value --> ignore setters
    %extend vector<const char *> {
@@ -344,14 +348,14 @@ namespace std {
    %template(StringVector) vector<const char *>;
 };
 
-%extend SimTime {
+%extend omnetpp::SimTime {
    const SimTime add(const SimTime& x) {return *self + x;}
    const SimTime substract(const SimTime& x) {return *self - x;}
    const SimTime add(double x) {return *self + x;}
    const SimTime substract(double x) {return *self - x;}
 }
 
-%typemap(javacode) cEnvir %{
+%typemap(javacode) omnetpp::cEnvir %{
   public void print(String s) {
     puts(s);
   }
@@ -361,13 +365,13 @@ namespace std {
   }
 %}
 
-%extend cEnvir
+%extend omnetpp::cEnvir
 {
     void puts(const char *s) {printf("%s", s);}
 };
 
-cEnvir *getEv();
-%{ inline cEnvir *getEv() {return &ev;} %}
+omnetpp::cEnvir *getEv();
+%{ inline omnetpp::cEnvir *getEv() {return omnetpp::cSimulation::getActiveEnvir();} %}
 
 // ignore/rename some operators (some have method equivalents)
 %ignore cPar::operator=;
@@ -426,21 +430,21 @@ cEnvir *getEv();
 %ignore configOptions;
 
 %{
-cDefaultList& getDefaultList() {return defaultList;}
-cRegistrationList *getRegisteredComponentTypes() {return componentTypes.getInstance();}
-cRegistrationList *getRegisteredNedFunctions() {return nedFunctions.getInstance();}
-cRegistrationList *getRegisteredClasses() {return classes.getInstance();}
-cRegistrationList *getRegisteredEnums() {return enums.getInstance();}
-cRegistrationList *getRegisteredClassDescriptors() {return classDescriptors.getInstance();}
-cRegistrationList *getRegisteredConfigOptions() {return configOptions.getInstance();}
+omnetpp::cDefaultList& getDefaultList() {return omnetpp::defaultList;}
+omnetpp::cRegistrationList *getRegisteredComponentTypes() {return omnetpp::componentTypes.getInstance();}
+omnetpp::cRegistrationList *getRegisteredNedFunctions() {return omnetpp::nedFunctions.getInstance();}
+omnetpp::cRegistrationList *getRegisteredClasses() {return omnetpp::classes.getInstance();}
+omnetpp::cRegistrationList *getRegisteredEnums() {return omnetpp::enums.getInstance();}
+omnetpp::cRegistrationList *getRegisteredClassDescriptors() {return omnetpp::classDescriptors.getInstance();}
+omnetpp::cRegistrationList *getRegisteredConfigOptions() {return omnetpp::configOptions.getInstance();}
 %}
-cDefaultList& getDefaultList();
-cRegistrationList *getRegisteredComponentTypes();
-cRegistrationList *getRegisteredNedFunctions();
-cRegistrationList *getRegisteredClasses();
-cRegistrationList *getRegisteredEnums();
-cRegistrationList *getRegisteredClassDescriptors();
-cRegistrationList *getRegisteredConfigOptions();
+omnetpp::cDefaultList& getDefaultList();
+omnetpp::cRegistrationList *getRegisteredComponentTypes();
+omnetpp::cRegistrationList *getRegisteredNedFunctions();
+omnetpp::cRegistrationList *getRegisteredClasses();
+omnetpp::cRegistrationList *getRegisteredEnums();
+omnetpp::cRegistrationList *getRegisteredClassDescriptors();
+omnetpp::cRegistrationList *getRegisteredConfigOptions();
 
 // ignore macros that confuse swig
 /*
@@ -455,56 +459,57 @@ cRegistrationList *getRegisteredConfigOptions();
 
 
 // ignore problematic methods/class
-%ignore cDynamicExpression::evaluate; // returns inner type (swig is not prepared to handle them)
-%ignore cDensityEstBase::getCellInfo; // returns inner type (swig is not prepared to handle them)
-%ignore cKSplit;  // several methods are problematic
-%ignore cPacketQueue;  // Java compile problems (cMessage/cPacket conversion)
-%ignore cTopology; // would need to wrap its inner classes too
-%ignore cDynamicExpression;
-%ignore cAccuracyDetection;
-%ignore cADByStddev;
-%ignore cTransientDetection;
-%ignore cTDExpandingWindows;
+%ignore omnetpp::cDynamicExpression::evaluate; // returns inner type (swig is not prepared to handle them)
+%ignore omnetpp::cDensityEstBase::getCellInfo; // returns inner type (swig is not prepared to handle them)
+%ignore omnetpp::cKSplit;  // several methods are problematic
+%ignore omnetpp::cPacketQueue;  // Java compile problems (cMessage/cPacket conversion)
+%ignore omnetpp::cTopology; // would need to wrap its inner classes too
+%ignore omnetpp::cDynamicExpression;
+%ignore omnetpp::cAccuracyDetection;
+%ignore omnetpp::cADByStddev;
+%ignore omnetpp::cTransientDetection;
+%ignore omnetpp::cTDExpandingWindows;
 
-%ignore critfunc_const;
-%ignore critfunc_depth;
-%ignore divfunc_const;
-%ignore divfunc_babak;
+%ignore omnetpp::critfunc_const;
+%ignore omnetpp::critfunc_depth;
+%ignore omnetpp::divfunc_const;
+%ignore omnetpp::divfunc_babak;
 
-%ignore SimTime::ttoa;
-%ignore SimTime::str(char *buf);
-%ignore SimTime::parse(const char *, const char *&);
+%ignore omnetpp::SimTime::ttoa;
+%ignore omnetpp::SimTime::str(char *buf);
+%ignore omnetpp::SimTime::parse(const char *, const char *&);
 
-%ignore cMsgPar::operator=(void*);
+%ignore omnetpp::cMsgPar::operator=(void*);
 
-%typemap(javacode) cClassDescriptor %{
+%typemap(javacode) omnetpp::cClassDescriptor %{
   public static long getCPtr(cObject obj) { // make method public
     return cObject.getCPtr(obj);
   }
 %}
 
-%extend cClassDescriptor {
+%extend omnetpp::cClassDescriptor {
    cObject *getFieldAsCObject(void *object, int field, int index) {
-       return self->getFieldIsCObject(object,field) ? (cObject *)self->getFieldStructPointer(object,field,index) : NULL;
+       return self->getFieldIsCObject(field) ? (omnetpp::cObject *)self->getFieldStructValuePointer(object,field,index) : NULL;
    }
 }
 
 // prevent generating setSimulation() method
 %ignore ::simulation;
-cSimulation *getSimulation();
-%{ inline cSimulation *getSimulation() {return &simulation;} %}
+// getSimulation is natively defined in Omnet 5.0
+//omnetpp::cSimulation *omnetpp::getSimulation();
+//%{ inline omnetpp::cSimulation *omnetpp::getSimulation() {return &(omnetpp::simulation);} %}
 
 
 // JSimpleModule
-%newobject JSimpleModule::retrieveMsgToBeHandled;
-%ignore JSimpleModule::JSimpleModule;
-%ignore JSimpleModule::vm;
-%ignore JSimpleModule::jenv;
+%newobject omnetpp::JSimpleModule::retrieveMsgToBeHandled;
+%ignore omnetpp::JSimpleModule::JSimpleModule;
+%ignore omnetpp::JSimpleModule::vm;
+%ignore omnetpp::JSimpleModule::jenv;
 
-%javamethodmodifiers JSimpleModule::swigSetJavaPeer "private";
-%javamethodmodifiers JSimpleModule::swigJavaPeerOf "protected";
+%javamethodmodifiers omnetpp::JSimpleModule::swigSetJavaPeer "private";
+%javamethodmodifiers omnetpp::JSimpleModule::swigJavaPeerOf "protected";
 
-%typemap(javacode) JSimpleModule %{
+%typemap(javacode) omnetpp::JSimpleModule %{
 
   public JSimpleModule() {
     this(0, false);  // and C++ code will call setCPtr() later
@@ -553,7 +558,7 @@ cSimulation *getSimulation();
 %javamethodmodifiers JMessage::swigSetJavaPeer "private";
 %javamethodmodifiers JMessage::swigJavaPeerOf "protected";
 
-%typemap(javacode) JMessage %{
+%typemap(javacode) omnetpp::JMessage %{
   public JMessage() {this(null, 0, 99); swigSetJavaPeer(this); }
   public JMessage(String name) {this(name, 0, 99); swigSetJavaPeer(this); }
   public JMessage(String name, int kind) {this(name, kind, 99); swigSetJavaPeer(this); }
@@ -597,129 +602,133 @@ cSimulation *getSimulation();
 
 
 // The BASECLASS(), DERIVEDCLASS() macros should come from the memorymgmt_xxx.i file
-BASECLASS(SimTime);
-BASECLASS(cObject);
-BASECLASS(cDisplayString);
-BASECLASS(cEnvir);
-BASECLASS(cException);
-BASECLASS(cExpression);
-BASECLASS(cSubModIterator);
-BASECLASS(cVisitor);
-BASECLASS(cXMLElement);
-BASECLASS(std::vector<cXMLElement*>);
-BASECLASS(cObjectFactory);
+BASECLASS(omnetpp::SimTime);
+BASECLASS(omnetpp::cObject);
+BASECLASS(omnetpp::cDisplayString);
+BASECLASS(omnetpp::cEnvir);
+BASECLASS(omnetpp::cException);
+BASECLASS(omnetpp::cExpression);
+BASECLASS(omnetpp::cSubModIterator);
+BASECLASS(omnetpp::cVisitor);
+BASECLASS(omnetpp::cXMLElement);
+BASECLASS(std::vector<omnetpp::cXMLElement*>);
+BASECLASS(omnetpp::cObjectFactory);
+BASECLASS(omnetpp::cEvent)
 //BASECLASS(std::map<std::string,std::string>);
-DERIVEDCLASS(cArray, cObject);
-DERIVEDCLASS(cComponentType, cObject);
-DERIVEDCLASS(cChannelType, cObject);
-DERIVEDCLASS(cModuleType, cObject);
-DERIVEDCLASS(cComponent, cObject);
-DERIVEDCLASS(cChannel, cObject);
-DERIVEDCLASS(cIdealChannel, cObject);
-DERIVEDCLASS(cDelayChannel, cObject);
-DERIVEDCLASS(cDatarateChannel, cObject);
-DERIVEDCLASS(cModule, cObject);
-DERIVEDCLASS(cSimpleModule, cObject);
-DERIVEDCLASS(cDefaultList, cObject);
-//DERIVEDCLASS(cDoubleExpression, cExpression);
-DERIVEDCLASS(cGate, cObject);
-DERIVEDCLASS(cMessage, cObject);
-DERIVEDCLASS(cPacket, cObject);
-DERIVEDCLASS(cPar, cObject);
-DERIVEDCLASS(cObject, cObject);
-DERIVEDCLASS(cOutVector, cObject);
-DERIVEDCLASS(cMsgPar, cObject);
-DERIVEDCLASS(cObject, cObject);
-DERIVEDCLASS(cQueue, cObject);
-DERIVEDCLASS(cRuntimeError, cException);
-DERIVEDCLASS(cSimulation, cObject);
-DERIVEDCLASS(cStatistic, cObject);
-DERIVEDCLASS(cStdDev, cObject);
-DERIVEDCLASS(cProperties, cObject);
-DERIVEDCLASS(cProperty, cObject);
+DERIVEDCLASS(omnetpp::cArray, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cComponentType, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cChannelType, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cModuleType, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cComponent, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cChannel, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cIdealChannel, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cDelayChannel, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cDatarateChannel, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cModule, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cSimpleModule, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cDefaultList, omnetpp::cObject);
+//DERIVEDCLASS(omnetpp::cDoubleExpression, omnetpp::cExpression);
+DERIVEDCLASS(omnetpp::cGate, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cMessage, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cPacket, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cPar, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cObject, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cOutVector, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cMsgPar, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cObject, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cQueue, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cRuntimeError, omnetpp::cException);
+DERIVEDCLASS(omnetpp::cSimulation, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cStatistic, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cStdDev, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cProperties, omnetpp::cObject);
+DERIVEDCLASS(omnetpp::cProperty, omnetpp::cObject);
 
-%ignore JMessage::JMessage(const JMessage&);
-%ignore JMessage::operator=(const JMessage&);
+%ignore omnetpp::JMessage::JMessage(const JMessage&);
+%ignore omnetpp::JMessage::operator=(const JMessage&);
 
-typedef SimTime simtime_t;
+typedef omnetpp::SimTime simtime_t;
 
 %include "innerclasses.h"
 
-%include "simkerneldefs.h"
-%include "simtime.h"
-%include "simtime_t.h"
-%include "cobject.h"
-%include "cnamedobject.h"
-%include "cownedobject.h"
-%include "cdefaultlist.h"
-%include "ccomponent.h"
-%include "cchannel.h"
-%include "cdelaychannel.h"
-%include "cdataratechannel.h"
-%include "cmodule.h"
-%include "ccoroutine.h"
-%include "csimplemodule.h"
-%include "ccomponenttype.h"
-%include "carray.h"
-//%include "clinkedlist.h"
-%include "cqueue.h"
-%include "cpacketqueue.h"
-%include "cdetect.h"
-%include "cstatistic.h"
-%include "cstddev.h"
-%include "cdensityestbase.h"
-%include "chistogram.h"
-%include "cksplit.h"
-%include "cpsquare.h"
-%include "cvarhist.h"
-%include "ccoroutine.h"
-%include "crng.h"
-%include "clcg32.h"
-%include "cmersennetwister.h"
-%include "cobjectfactory.h"
-%include "ccommbuffer.h"
-//%include "cconfiguration.h"
-//%include "cconfigoption.h"
-%include "cdisplaystring.h"
-//%include "cdynamicexpression.h"
-%include "cenum.h"
-%include "cenvir.h"
-%include "cexception.h"
-%include "cexpression.h"
-//%include "chasher.h"
-%include "cfsm.h"
-//%include "cmathfunction.h"
-%include "cgate.h"
-%include "cmessage.h"
-%include "cmsgpar.h"
-%include "cmessageheap.h"
-//%include "cnedfunction.h"
-//%include "cnullenvir.h"
-%include "coutvector.h"
-%include "cpar.h"
-%include "cparsimcomm.h"
-%include "cproperty.h"
-%include "cproperties.h"
-//%include "cscheduler.h"
-%include "csimulation.h"
-//%include "cstringtokenizer.h"
-%include "cclassdescriptor.h"
-//%include "ctopology.h"
-%include "cvisitor.h"
-//%include "cwatch.h"
-%include "cstlwatch.h"
-%include "cxmlelement.h"
-%include "distrib.h"
-%include "envirext.h"
-%include "errmsg.h"
-%include "globals.h"
-%include "onstartup.h"
-//%include "opp_string.h"
-%include "random.h"
-%include "cregistrationlist.h"
-%include "regmacros.h"
-%include "simutil.h"
-//%include "packing.h"
+%include "omnetpp/simkerneldefs.h"
+%include "omnetpp/simtime.h"
+%include "omnetpp/simtime_t.h"
+%include "omnetpp/cobject.h"
+%include "omnetpp/cnamedobject.h"
+%include "omnetpp/cownedobject.h"
+%include "omnetpp/cdefaultlist.h"
+%include "omnetpp/clistener.h"
+%include "omnetpp/ccomponent.h"
+%include "omnetpp/cchannel.h"
+%include "omnetpp/cdelaychannel.h"
+%include "omnetpp/cdataratechannel.h"
+%include "omnetpp/cmodule.h"
+%include "omnetpp/platdep/platdefs.h"
+%include "omnetpp/ccoroutine.h"
+%include "omnetpp/csimplemodule.h"
+%include "omnetpp/ccomponenttype.h"
+%include "omnetpp/carray.h"
+//%include "omnetpp/clinkedlist.h"
+%include "omnetpp/cqueue.h"
+%include "omnetpp/cpacketqueue.h"
+//%include "omnetpp/cdetect.h"
+%include "omnetpp/cstatistic.h"
+%include "omnetpp/cstddev.h"
+//%include "omnetpp/cdensityestbase.h"
+%include "omnetpp/chistogram.h"
+%include "omnetpp/cksplit.h"
+%include "omnetpp/cpsquare.h"
+%include "omnetpp/cvarhist.h"
+%include "omnetpp/ccoroutine.h"
+%include "omnetpp/crng.h"
+%include "omnetpp/clcg32.h"
+%include "omnetpp/cmersennetwister.h"
+%include "omnetpp/cobjectfactory.h"
+%include "omnetpp/ccommbuffer.h"
+//%include "omnetpp/cconfiguration.h"
+//%include "omnetpp/cconfigoption.h"
+%include "omnetpp/cdisplaystring.h"
+//%include "omnetpp/cdynamicexpression.h"
+%include "omnetpp/cenum.h"
+%include "omnetpp/cenvir.h"
+%include "omnetpp/cexception.h"
+%include "omnetpp/cexpression.h"
+//%include "omnetpp/chasher.h"
+%include "omnetpp/cfsm.h"
+//%include "omnetpp/cmathfunction.h"
+%include "omnetpp/cgate.h"
+%include "omnetpp/cmessage.h"
+%include "omnetpp/cmsgpar.h"
+%include "omnetpp/cevent.h"
+%include "omnetpp/ceventheap.h"
+//%include "omnetpp/cnedfunction.h"
+//%include "omnetpp/cnullenvir.h"
+%include "omnetpp/coutvector.h"
+%include "omnetpp/cpar.h"
+%include "omnetpp/cparsimcomm.h"
+%include "omnetpp/cproperty.h"
+%include "omnetpp/cproperties.h"
+//%include "omnetpp/cscheduler.h"
+%include "omnetpp/csimulation.h"
+//%include "omnetpp/cstringtokenizer.h"
+%include "omnetpp/cclassdescriptor.h"
+//%include "omnetpp/ctopology.h"
+%include "omnetpp/cvisitor.h"
+//%include "omnetpp/cwatch.h"
+%include "omnetpp/cstlwatch.h"
+%include "omnetpp/cxmlelement.h"
+%include "omnetpp/distrib.h"
+%include "omnetpp/envirext.h"
+%include "omnetpp/errmsg.h"
+%include "omnetpp/globals.h"
+%include "omnetpp/onstartup.h"
+//%include "omnetpp/opp_string.h"
+%include "omnetpp/crandom.h"
+%include "omnetpp/cregistrationlist.h"
+%include "omnetpp/regmacros.h"
+%include "omnetpp/simutil.h"
+//%include "omnetpp/packing.h"
 
 //%include "index.h"
 //%include "mersennetwister.h"
@@ -735,5 +744,4 @@ typedef SimTime simtime_t;
 
 %include "JSimpleModule.h"
 %include "JMessage.h"
-
 

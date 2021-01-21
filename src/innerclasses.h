@@ -30,38 +30,43 @@
 
 // swig cannot handle inner classes, so wrap the ones we need in global classes
 
+namespace omnetpp {
+
 class cModule_GateIterator
 {
   private:
-    cModule::GateIterator it;
+    omnetpp::cModule::GateIterator it;
   public:
-    cModule_GateIterator(const cModule *m) : it(m) {}
-    cGate *get() const {return it();}
+    cModule_GateIterator(const omnetpp::cModule *m) : it(m) {}
+    omnetpp::cGate *get() const {return it();}
     bool end() const {return it.end();}
-    void next() {it++;}
-    void advance(int k) {it+=k;}
+    void next() {++it;}
+    void advance(int k) {
+    for(int i=0; i<k; i++)
+        ++it;
+    }
 };
 
 class cModule_SubmoduleIterator
 {
   private:
-    cModule::SubmoduleIterator it;
+    omnetpp::cModule::SubmoduleIterator it;
   public:
-    cModule_SubmoduleIterator(const cModule *m) : it(m) {}
-    cModule *get() const {return it();}
+    cModule_SubmoduleIterator(const omnetpp::cModule *m) : it(m) {}
+    omnetpp::cModule *get() const {return it();}
     bool end() const {return it.end();}
-    void next() {it++;}
+    void next() {++it;}
 };
 
 class cModule_ChannelIterator
 {
   private:
-    cModule::ChannelIterator it;
+    omnetpp::cModule::ChannelIterator it;
   public:
-    cModule_ChannelIterator(const cModule *m) : it(m) {}
-    cChannel *get() const {return const_cast<cModule_ChannelIterator*>(this)->it();}
+    cModule_ChannelIterator(const omnetpp::cModule *m) : it(m) {}
+    omnetpp::cChannel *get() const {return const_cast<cModule_ChannelIterator*>(this)->it();}
     bool end() const {return it.end();}
-    void next() {it++;}
+    void next() {++it;}
 };
 
 

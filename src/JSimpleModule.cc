@@ -32,11 +32,12 @@
 #include "JSimpleModule.h"
 #include "JUtil.h"
 
+using namespace omnetpp;
 using namespace JUtil;  // for jenv, checkExceptions(), findMethod(), etc
 
 
-//#define DEBUGPRINTF printf
-#define DEBUGPRINTF (void)
+//#define DEBUGPRINTF(...) printf(__VA_ARGS__)
+#define DEBUGPRINTF(...) ((void)0)
 
 Define_Module(JSimpleModule);
 
