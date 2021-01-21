@@ -1,6 +1,14 @@
 #!/usr/bin/perl
 #
-# read a SWIG-generated .java file with native methods, and create a table
+# This file is part of the OMNeT++ JSimpleModule project.
+# Copyright 2009-2021 OpenSim Ltd and Andras Varga.
+#
+# Redistribution and use in source and binary forms, with or
+# without modification, are permitted.
+#
+
+#
+# Read a SWIG-generated .java file with native methods, and create a table
 # for the RegisterNatives() JNI call.
 #
 # See SWIG issue 1522417: "Java/JNI: Generate method that registers methods with a VM"
