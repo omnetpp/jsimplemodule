@@ -38,7 +38,6 @@ DISTDIR  = ../jsimple
 GENERATED_FILES = $(OUTDIR)/simkernel_wrap.cc  $(OUTDIR)/SimkernelJNI_registerNatives.cc
 
 DIST_SRC_FILES = \
-    ChangeLog \
     commondefs.i \
     PlainMemoryManagement.i \
     Reflection.i \
