@@ -9,17 +9,17 @@
 
 /**
  * Implements a Java-based simple module. It instantiates the Java class
- * given in the "javaClass" module parameter, and delegates handleMessage()
+ * based on the module's fully qualified name, and delegates handleMessage()
  * and other methods to it.
  *
- * From JObjectAccess it inherits methods that faciliate accessing data
+ * From JObjectAccess it inherits methods that facilitate accessing data
  * members of the Java class, should it become necessary: getIntJavaField(),
  * getLongJavaField(), getStringJavaField(), setIntJavaField(), etc.
  */
 class JSimpleModule : public cSimpleModule, public JObjectAccess
 {
   protected:
-    jobject javaObject;
+    jobject javaPeer;
     jmethodID numInitStagesMethod;
     jmethodID initializeStageMethod;
     jmethodID doHandleMessageMethod;
@@ -33,6 +33,12 @@ class JSimpleModule : public cSimpleModule, public JObjectAccess
     JSimpleModule();
     virtual ~JSimpleModule();
     cMessage *retrieveMsgToBeHandled() {return msgToBeHandled;}  // helper for Java
+
+    jobject swigJavaPeer() {
+         if (javaPeer==0) createJavaModuleObject();
+         return javaPeer;
+    }
+    static jobject swigJavaPeerOf(cModule *object);
 
   protected:
     virtual int numInitStages() const;

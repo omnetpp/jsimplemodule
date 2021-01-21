@@ -26,14 +26,14 @@ class JMessage : public cMessage, public JObjectAccess
     JMessage(const JMessage& msg);
     virtual ~JMessage();
 
-    virtual cPolymorphic *dup() const  {return new JMessage(*this);}
-    std::string info() const;
-    std::string detailedInfo() const;
+    virtual cMessage *dup() const  {return new JMessage(*this);}
+    virtual std::string info() const;
+    virtual std::string detailedInfo() const;
     JMessage& operator=(const JMessage& msg);
 
     void swigSetJavaPeer(jobject msgObject);
     jobject swigJavaPeer() {return javaPeer;}
-    static jobject swigJavaPeerOf(cPolymorphic *object);
+    static jobject swigJavaPeerOf(cMessage *object);
 
     // Also note methods inherited from JObjectAccess: getIntJavaField(), etc.
 };

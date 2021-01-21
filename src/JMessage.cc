@@ -81,7 +81,7 @@ void JMessage::swigSetJavaPeer(jobject msgObject)
     JObjectAccess::setObject(javaPeer);
 }
 
-jobject JMessage::swigJavaPeerOf(cPolymorphic *object)
+jobject JMessage::swigJavaPeerOf(cMessage *object)
 {
     JMessage *msg = dynamic_cast<JMessage *>(object);
     return msg ? msg->swigJavaPeer() : 0;

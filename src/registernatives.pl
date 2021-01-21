@@ -12,8 +12,10 @@ $javafile = $ARGV[0];
 die "no Java file specified" if ($javafile eq '');
 
 $cppfile = $javafile;
-$cppfile =~ s|\..*|_registerNatives.cc|;
+$cppfile =~ s|\.java|_registerNatives.cc|;
 $cppfile =~ s|^.*[/\\]||;
+$cppfile = $ARGV[1] . "/" . $cppfile;
+print $cppfile;
 
 open(INFILE, $javafile) || die "cannot open $javafile";
 read(INFILE, $java, 1000000) || die "cannot read $javafile";
@@ -73,7 +75,7 @@ print OUT "};\n\n";
 
 print OUT "static JNINativeMethod ${classname}_methods[] = {\n";
 for ($i=0; $i<$n; $i++) {
-    print OUT "    { \"$mname{$i}\", \"$msig{$i}\", (void *)$mfunc{$i} },\n";
+    print OUT "    { (char *)\"$mname{$i}\", (char *)\"$msig{$i}\", (void *)$mfunc{$i} },\n";
 }
 print OUT "};\n\n";
 print OUT "void ${classname}_registerNatives(JNIEnv *jenv)\n";

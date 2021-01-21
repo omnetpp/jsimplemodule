@@ -1,4 +1,6 @@
 #include <assert.h>
+#include <string.h>
+#include <algorithm>
 #include "JSimpleModule.h"
 #include "JUtil.h"
 
@@ -13,32 +15,33 @@ Define_Module(JSimpleModule);
 
 JSimpleModule::JSimpleModule()
 {
-    javaObject = 0;
+    // Note: we cannot call createJavaModuleObject() here, because the module
+    // type object (cModuleType) is not yet set on the module
+    javaPeer = 0;
 }
 
 JSimpleModule::~JSimpleModule()
 {
-    if (javaObject && finishMethod)
-        jenv->DeleteGlobalRef(javaObject);
+    if (javaPeer && finishMethod)
+        jenv->DeleteGlobalRef(javaPeer);
 }
 
 int JSimpleModule::numInitStages() const
 {
-    if (javaObject==0)
-        return 1; // at the beginning, we can only say "at least one stage"
+    if (javaPeer==0)
+        const_cast<JSimpleModule *>(this)->createJavaModuleObject();
 
-    int n = jenv->CallIntMethod(javaObject, numInitStagesMethod);
+    int n = jenv->CallIntMethod(javaPeer, numInitStagesMethod);
     checkExceptions();
     return n;
 }
 
 void JSimpleModule::initialize(int stage)
 {
-    if (stage==0)
+    if (javaPeer==0)
         createJavaModuleObject();
-
     DEBUGPRINTF("Invoking initialize(%d) on new instance...\n", stage);
-    jenv->CallVoidMethod(javaObject, initializeStageMethod, stage);
+    jenv->CallVoidMethod(javaPeer, initializeStageMethod, stage);
     checkExceptions();
 }
 
@@ -49,7 +52,9 @@ void JSimpleModule::createJavaModuleObject()
          initJVM();
 
     // find class and method IDs (note: initialize() and finish() are optional)
-    const char *clazzName = par("javaClass");
+    std::string className = getNedTypeName();
+    replace(className.begin(), className.end(), '.', '/');
+    const char *clazzName = className.c_str();
     DEBUGPRINTF("Finding class %s...\n", clazzName);
     jclass clazz = jenv->FindClass(clazzName);
     checkExceptions();
@@ -68,32 +73,37 @@ void JSimpleModule::createJavaModuleObject()
     if (setCPtrMethod)
     {
         jmethodID ctor = findMethod(clazz, clazzName, "<init>", "()V");
-        javaObject = jenv->NewObject(clazz, ctor);
+        javaPeer = jenv->NewObject(clazz, ctor);
         checkExceptions();
-        jenv->CallVoidMethod(javaObject, setCPtrMethod, (jlong)this);
+        jenv->CallVoidMethod(javaPeer, setCPtrMethod, (jlong)this);
     }
     else
     {
         jmethodID ctor = findMethod(clazz, clazzName, "<init>", "(J)V");
-        javaObject = jenv->NewObject(clazz, ctor, (jlong)this);
+        javaPeer = jenv->NewObject(clazz, ctor, (jlong)this);
         checkExceptions();
     }
-    javaObject = jenv->NewGlobalRef(javaObject);
+    javaPeer = jenv->NewGlobalRef(javaPeer);
     checkExceptions();
-    JObjectAccess::setObject(javaObject);
+    JObjectAccess::setObject(javaPeer);
 }
 
 void JSimpleModule::handleMessage(cMessage *msg)
 {
     msgToBeHandled = msg;
-    jenv->CallVoidMethod(javaObject, doHandleMessageMethod);
+    jenv->CallVoidMethod(javaPeer, doHandleMessageMethod);
     checkExceptions();
 }
 
 void JSimpleModule::finish()
 {
-    jenv->CallVoidMethod(javaObject, finishMethod);
+    jenv->CallVoidMethod(javaPeer, finishMethod);
     checkExceptions();
 }
 
+jobject JSimpleModule::swigJavaPeerOf(cModule *object)
+{
+    JSimpleModule *mod = dynamic_cast<JSimpleModule *>(object);
+    return mod ? mod->swigJavaPeer() : 0;
+}
 
