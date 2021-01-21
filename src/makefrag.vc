@@ -1,0 +1,77 @@
+INCLUDE_PATH=$(INCLUDE_PATH) -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/win32
+LIBS=$(LIBS) /libpath:$(JAVA_HOME)/lib jvm.lib
+# SWIG="$(TOOLS_DIR)\swigwin-1.3.31\swig.exe"
+SWIG="$(TOOLS_DIR)\swig-1.3.25\swig.exe"
+JAVAC=$(JAVA_HOME)\bin\javac.exe
+JAR=$(JAVA_HOME)\bin\jar.exe
+PERL="$(TOOLS_DIR)\Perl\bin\perl.exe"
+
+JAVAPKG = org.omnetpp.simkernel
+JAVADIR = java\$(JAVAPKG:.=\)
+DISTDIR = distrib
+
+EXTRA_OBJS = SimkernelJNI_registerNatives.obj simkernel_wrap.obj
+
+DIST_SRC_FILES = \
+  JSimpleModule.cc \
+  JSimpleModule.h \
+  JSimpleModule.ned \
+  JMessage.cc \
+  JMessage.h \
+  JUtil.cc \
+  JUtil.h \
+  makefrag.vc \
+  simkernel.i \
+  reflect.i \
+  memorymgmt_plain.i \
+  registernatives.pl \
+  m.bat \
+  r.bat
+
+# the following files are not distributed by default
+EXPERIMENTAL_SRC_FILES = \
+  memorymgmt_msg_one2one.i \
+  patchcastfrom.pl \
+  patchownership.pl \
+  ProxyObjectMap.java.in
+
+all: $(TARGET) javafiles dist
+
+simkernel_wrap.cc SimkernelJNI_registerNatives.cc : simkernel.i Makefile.vc $(OMNETPP_ROOT)/include/*.h  # and many oher things
+	-mkdir java >nul 2>nul
+	-mkdir java\org >nul 2>nul
+	-mkdir java\org\omnetpp >nul 2>nul
+	-mkdir java\org\omnetpp\simkernel >nul 2>nul
+	-del $(JAVADIR)\*.java >nul
+	$(SWIG) -c++ -java -package $(JAVAPKG) -I$(OMNETPP_ROOT)/include -I$(OMNETPP_ROOT)/src/envir -I$(OMNETPP_ROOT) -outdir $(JAVADIR) simkernel.i
+	-del simkernel_wrap.cc >nul
+	ren simkernel_wrap.cxx simkernel_wrap.cc
+	$(PERL) -i.bak -pe "s/JNIEXPORT +//g" simkernel_wrap.cc
+	$(PERL) -i.bak -pe "s/JNICALL +//g" simkernel_wrap.cc
+	$(PERL) -i.bak -pe "s/jenv;/jenv; LOG_JNI_CALL();/g" simkernel_wrap.cc
+	$(PERL) registernatives.pl $(JAVADIR)/SimkernelJNI.java
+	@rem $(PERL) patchownership.pl $(JAVADIR)
+	@rem $(PERL) patchcastfrom.pl $(JAVADIR)
+
+SimkernelJNI_registerNatives.obj: SimkernelJNI_registerNatives.cc
+	$(CXX) -c $(COPTS) /Tp SimkernelJNI_registerNatives.cc
+
+simkernel_wrap.obj: simkernel_wrap.cc
+	$(CXX) -c $(COPTS) /Tp simkernel_wrap.cc
+
+javafiles:
+	@rem copy ProxyObjectMap.java.in java\org\omnetpp\simkernel\ProxyObjectMap.java
+	dir /b/s java\*.java >listfile.tmp
+	-rd /s/q bin 2>nul
+	mkdir bin >nul
+	$(JAVAC) -sourcepath java -d bin @listfile.tmp
+
+dist: $(TARGET) javafiles
+	-mkdir $(DISTDIR) >nul 2>nul
+	$(JAR) cvf $(DISTDIR)/simkernel.jar -C bin org
+	$(JAR) cvf $(DISTDIR)/simkernel-src.jar -C java org
+	$(JAR) cvfM $(DISTDIR)/src.zip $(DIST_SRC_FILES)
+	del *_m.*
+	copy *.cc $(DISTDIR)
+	copy *.h $(DISTDIR)
+	copy JSimpleModule.ned $(DISTDIR)
