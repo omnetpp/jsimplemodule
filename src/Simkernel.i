@@ -33,6 +33,8 @@
 #include "JSimpleModule.h"
 #include "JMessage.h"
 
+using namespace omnetpp;
+
 // for debugging:
 #include <stdio.h>
 #define LOG_JNI_CALL() (void)0
@@ -122,23 +124,35 @@
 
 // ignore non-inspectable classes and those that cause problems
 %ignore eMessageKind;
-%ignore cLinkedList;
-%ignore cCommBuffer;
 %ignore cContextSwitcher;
 %ignore cContextTypeSwitcher;
-%ignore cOutputVectorManager;
-%ignore cOutputScalarManager;
-%ignore cSnapshotManager;
-%ignore cScheduler;
-%ignore cRealTimeScheduler;
-%ignore cParsimCommunications;
 %ignore ModNameParamResolver;
 %ignore StringMapParamResolver;
 %ignore cStackCleanupException;
 %ignore cTerminationException;
 %ignore cEndModuleException;
 %ignore cStaticFlag;
-%ignore ExecuteOnStartup;
+
+%ignore omnetpp::cGate::Desc;
+%ignore omnetpp::cChannel::MessageSentSignalValue;
+%ignore omnetpp::cChannel::result_t;
+
+%ignore omnetpp::cQueue::forEachChild;
+%ignore omnetpp::cXMLElement::forEachChild;
+%ignore omnetpp::cEventHeap::forEachChild;
+%ignore omnetpp::cObject::forEachChild;
+%ignore omnetpp::cPar::forEachChild;
+%ignore omnetpp::cComponent::forEachChild;
+%ignore omnetpp::cMessage::forEachChild;
+%ignore omnetpp::cSimulation::forEachChild;
+%ignore omnetpp::cEvent::forEachChild;
+%ignore omnetpp::cSimpleModule::forEachChild;
+%ignore omnetpp::cModule::forEachChild;
+%ignore omnetpp::cArray::forEachChild;
+%ignore omnetpp::cRegistrationList::forEachChild;
+%ignore omnetpp::cGate::forEachChild;
+%ignore omnetpp::cMsgPar::forEachChild;
+%ignore omnetpp::cDefaultList::forEachChild;
 
 %typemap(javacode) omnetpp::cModule %{
   public static cEnvir ev = Simkernel.getEv();
@@ -184,6 +198,7 @@
 %ignore omnetpp::cModule::setRNGMap;
 %ignore omnetpp::cModule::rng;
 %ignore omnetpp::cModule::getParentModule;
+%ignore omnetpp::cModule::getOrCreateFirstUnconnectedGatePair;
 
 %ignore omnetpp::cSimpleModule::pause;
 %ignore omnetpp::cSimpleModule::receive;
@@ -233,17 +248,7 @@
 %ignore omnetpp::cSimulation::setContextModule;
 %ignore omnetpp::cSimulation::setContextType;
 
-%ignore omnetpp::cStatistic::td;
-%ignore omnetpp::cStatistic::ra;
-%ignore omnetpp::cStatistic::addTransientDetection;
-%ignore omnetpp::cStatistic::addAccuracyDetection;
-%ignore omnetpp::cStatistic::getTransientDetectionObject;
-%ignore omnetpp::cStatistic::getAccuracyDetectionObject;
 %ignore omnetpp::cStatistic::getWeights; //ignore as this throws an error
-
-%ignore omnetpp::cDisplayString::setRoleToConnection;
-%ignore omnetpp::cDisplayString::setRoleToModule;
-%ignore omnetpp::cDisplayString::setRoleToModuleBackground;
 
 %ignore omnetpp::cXMLElement::getDocumentElementByPath;
 %ignore omnetpp::cXMLElement::getElementByPath;
@@ -316,6 +321,37 @@
 %ignore omnetpp::cLCG32;
 %ignore omnetpp::cMersenneTwister;
 
+%ignore omnetpp::cXMLElement::getChildren; // we have problems with cXMLElementVector wrapping
+%ignore omnetpp::cXMLElement::getChildrenByTagName; // ditto
+%ignore omnetpp::cXMLElement::getElementsByTagName; // ditto
+
+// ignore deprecated items:
+%ignore omnetpp::cObject::info;
+%ignore omnetpp::cObject::detailedInfo;
+%ignore omnetpp::cModule::size;
+%ignore omnetpp::cQueue::length;
+%ignore omnetpp::cQueue::empty;
+%ignore omnetpp::cStatistic::collect2;
+%ignore omnetpp::cStatistic::random;
+%ignore omnetpp::cStatistic::clearResult;
+%ignore omnetpp::cWeightedStdDev;
+%ignore omnetpp::cAbstractHistogram::isTransformed;
+%ignore omnetpp::cAbstractHistogram::transform;
+%ignore omnetpp::cAbstractHistogram::getNumCells;
+%ignore omnetpp::cAbstractHistogram::getBasepoint;
+%ignore omnetpp::cAbstractHistogram::getCellValue;
+%ignore omnetpp::cAbstractHistogram::getCellPDF;
+%ignore omnetpp::cAbstractHistogram::getUnderflowCell;
+%ignore omnetpp::cAbstractHistogram::getOverflowCell;
+%ignore omnetpp::cAbstractHistogram::getCellInfo;
+%ignore omnetpp::cHistogram::setRangeAuto;
+%ignore omnetpp::cHistogram::setRangeAutoLower;
+%ignore omnetpp::cHistogram::setRangeAutoUpper;
+%ignore omnetpp::cHistogram::setNumCells;
+%ignore omnetpp::cHistogram::setCellSize;
+%ignore omnetpp::cPar::setLongValue;
+%ignore omnetpp::cPar::longValue;
+
 
 namespace std {
    specialize_std_map_on_both(std::string,,,,std::string,,,);
@@ -323,14 +359,14 @@ namespace std {
 
    %template(StringMap) map<string,string>;
 
-   %ignore vector<omnetpp::cXMLElement*>::vector;
-   %ignore vector<omnetpp::cXMLElement*>::resize;
-   %ignore vector<omnetpp::cXMLElement*>::reserve;
-   %ignore vector<omnetpp::cXMLElement*>::capacity;
-   %ignore vector<omnetpp::cXMLElement*>::clear;
-   %ignore vector<omnetpp::cXMLElement*>::add;  //XXX this one doesn't work (because it was added later in Java)
-   %ignore vector<omnetpp::cXMLElement*>::set;
-   %template(cXMLElementVector) vector<omnetpp::cXMLElement*>;
+   // %ignore vector<omnetpp::cXMLElement*>::vector;
+   // %ignore vector<omnetpp::cXMLElement*>::resize;
+   // %ignore vector<omnetpp::cXMLElement*>::reserve;
+   // %ignore vector<omnetpp::cXMLElement*>::capacity;
+   // %ignore vector<omnetpp::cXMLElement*>::clear;
+   // %ignore vector<omnetpp::cXMLElement*>::add;  //XXX this one doesn't work (because it was added later in Java)
+   // %ignore vector<omnetpp::cXMLElement*>::set;
+   // %template(cXMLElementVector) vector<::omnetpp::cXMLElement*>;
 
    // std::vector<const char*> is only used as return value --> ignore setters
    %extend vector<const char *> {
@@ -405,19 +441,10 @@ omnetpp::cEnvir *getEv();
 %ignore parsimUnpack;
 
 // ignore non-inspectable and deprecated classes
-%ignore cCommBuffer;
 %ignore cContextSwitcher;
 %ignore cContextTypeSwitcher;
-%ignore cOutputVectorManager;
-%ignore cOutputScalarManager;
-%ignore cOutputSnapshotManager;
-%ignore cScheduler;
-%ignore cRealTimeScheduler;
-%ignore cParsimCommunications;
 %ignore ModNameParamResolver;
 %ignore StringMapParamResolver;
-%ignore cSubModIterator;
-%ignore cLinkedList;
 
 // ignore global variables but add accessors for them
 %ignore defaultList;
@@ -458,16 +485,8 @@ omnetpp::cRegistrationList *getRegisteredConfigOptions();
 
 
 // ignore problematic methods/class
-%ignore omnetpp::cDynamicExpression::evaluate; // returns inner type (swig is not prepared to handle them)
-%ignore omnetpp::cDensityEstBase::getCellInfo; // returns inner type (swig is not prepared to handle them)
-%ignore omnetpp::cKSplit;  // several methods are problematic
 %ignore omnetpp::cPacketQueue;  // Java compile problems (cMessage/cPacket conversion)
-%ignore omnetpp::cTopology; // would need to wrap its inner classes too
-%ignore omnetpp::cDynamicExpression;
-%ignore omnetpp::cAccuracyDetection;
-%ignore omnetpp::cADByStddev;
-%ignore omnetpp::cTransientDetection;
-%ignore omnetpp::cTDExpandingWindows;
+//%ignore omnetpp::cTopology; // would need to wrap its inner classes too
 
 %ignore omnetpp::critfunc_const;
 %ignore omnetpp::critfunc_depth;
@@ -606,11 +625,9 @@ BASECLASS(omnetpp::cObject);
 BASECLASS(omnetpp::cDisplayString);
 BASECLASS(omnetpp::cEnvir);
 BASECLASS(omnetpp::cException);
-BASECLASS(omnetpp::cExpression);
-BASECLASS(omnetpp::cSubModIterator);
-BASECLASS(omnetpp::cVisitor);
+//BASECLASS(omnetpp::cVisitor);
 BASECLASS(omnetpp::cXMLElement);
-BASECLASS(std::vector<omnetpp::cXMLElement*>);
+//BASECLASS(std::vector<omnetpp::cXMLElement*>);
 BASECLASS(omnetpp::cObjectFactory);
 BASECLASS(omnetpp::cEvent)
 //BASECLASS(std::map<std::string,std::string>);
@@ -649,6 +666,7 @@ DERIVEDCLASS(omnetpp::cProperty, omnetpp::cObject);
 typedef omnetpp::SimTime simtime_t;
 
 %include "omnetpp/simkerneldefs.h"
+%include "omnetpp/platdep/platdefs.h"
 %include "omnetpp/simtime.h"
 %include "omnetpp/simtime_t.h"
 %include "omnetpp/cobject.h"
@@ -661,28 +679,26 @@ typedef omnetpp::SimTime simtime_t;
 %include "omnetpp/cdelaychannel.h"
 %include "omnetpp/cdataratechannel.h"
 %include "omnetpp/cmodule.h"
-%include "omnetpp/platdep/platdefs.h"
 %include "omnetpp/ccoroutine.h"
 %include "omnetpp/csimplemodule.h"
 %include "omnetpp/ccomponenttype.h"
 %include "omnetpp/carray.h"
-//%include "omnetpp/clinkedlist.h"
 %include "omnetpp/cqueue.h"
 %include "omnetpp/cpacketqueue.h"
-//%include "omnetpp/cdetect.h"
+%include "omnetpp/crandom.h"
 %include "omnetpp/cstatistic.h"
 %include "omnetpp/cstddev.h"
-//%include "omnetpp/cdensityestbase.h"
+%include "omnetpp/cabstracthistogram.h"
 %include "omnetpp/chistogram.h"
-%include "omnetpp/cksplit.h"
+//%include "omnetpp/cksplit.h"
 %include "omnetpp/cpsquare.h"
-%include "omnetpp/cvarhist.h"
+//%include "omnetpp/cvarhist.h"
 %include "omnetpp/ccoroutine.h"
 %include "omnetpp/crng.h"
 %include "omnetpp/clcg32.h"
 %include "omnetpp/cmersennetwister.h"
 %include "omnetpp/cobjectfactory.h"
-%include "omnetpp/ccommbuffer.h"
+//%include "omnetpp/ccommbuffer.h"
 //%include "omnetpp/cconfiguration.h"
 //%include "omnetpp/cconfigoption.h"
 %include "omnetpp/cdisplaystring.h"
@@ -690,20 +706,21 @@ typedef omnetpp::SimTime simtime_t;
 %include "omnetpp/cenum.h"
 %include "omnetpp/cenvir.h"
 %include "omnetpp/cexception.h"
-%include "omnetpp/cexpression.h"
+//%include "omnetpp/cexpression.h"
 //%include "omnetpp/chasher.h"
 %include "omnetpp/cfsm.h"
 //%include "omnetpp/cmathfunction.h"
 %include "omnetpp/cgate.h"
+%include "omnetpp/cevent.h"
 %include "omnetpp/cmessage.h"
 %include "omnetpp/cmsgpar.h"
-%include "omnetpp/cevent.h"
+%include "omnetpp/cfutureeventset.h"
 %include "omnetpp/ceventheap.h"
 //%include "omnetpp/cnedfunction.h"
 //%include "omnetpp/cnullenvir.h"
 %include "omnetpp/coutvector.h"
 %include "omnetpp/cpar.h"
-%include "omnetpp/cparsimcomm.h"
+//%include "omnetpp/cparsimcomm.h"
 %include "omnetpp/cproperty.h"
 %include "omnetpp/cproperties.h"
 //%include "omnetpp/cscheduler.h"
@@ -711,12 +728,12 @@ typedef omnetpp::SimTime simtime_t;
 //%include "omnetpp/cstringtokenizer.h"
 %include "omnetpp/cclassdescriptor.h"
 //%include "omnetpp/ctopology.h"
-%include "omnetpp/cvisitor.h"
+//%include "omnetpp/cvisitor.h"
 //%include "omnetpp/cwatch.h"
-%include "omnetpp/cstlwatch.h"
+//%include "omnetpp/cstlwatch.h"
 %include "omnetpp/cxmlelement.h"
 %include "omnetpp/distrib.h"
-%include "omnetpp/envirext.h"
+//%include "omnetpp/envirext.h"
 %include "omnetpp/errmsg.h"
 %include "omnetpp/globals.h"
 %include "omnetpp/onstartup.h"

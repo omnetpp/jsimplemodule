@@ -51,8 +51,8 @@ for ($i=0; $i<$n; $i++) {
     $sig =~ s/(\w+\[\]) +(\w+)/\1/g;
     $sig =~ s/,/ /g;
 
-    # translate arg types and assemble signature string
-    $sig =~ s/(\w+)/toJNI($1);/gse;
+    # translate arg types (simple or qualified type names) and assemble signature string
+    $sig =~ s/([a-zA-Z0-9_.]+)/toJNI($1);/gse;
     $sig =~ s/ +//g;
     $sig = "($sig)" . toJNI($mret{$i});
 
@@ -96,6 +96,7 @@ print OUT "    }\n";
 print OUT "    int ret = jenv->RegisterNatives(clazz, ${classname}_methods, $n);\n";
 print OUT "    if (ret!=0) {\n";
 print OUT "        fprintf(stderr, \"ERROR: Cannot register native methods for ${classname}: RegisterNatives() returned %d\\n\", ret);\n";
+print OUT "        jenv->ExceptionDescribe();\n";
 print OUT "        exit(1);\n";
 print OUT "    }\n";
 print OUT "}\n\n";
@@ -118,6 +119,9 @@ sub toJNI()
     return $a."D" if ($t eq "double");
     return $a."Ljava/lang/String;" if ($t eq "String");
     return $a."Ljava/lang/Object;" if ($t eq "Object");
+    return $a."Ljava/math/BigInteger;" if ($t eq "BigInteger");
+    return $a."Ljava/math/BigInteger;" if ($t eq "java.math.BigInteger");
+    $t =~ tr/./$/; # for inner classes, e.g. cHistogram$Bin
     return $a."Lorg/omnetpp/simkernel/$t;";
 }
 
