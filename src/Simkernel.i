@@ -60,8 +60,8 @@ using namespace omnetpp;
 
 %include "std_common.i"
 %include "std_string.i"
-%include "std_map.i"    // cXMLElement
-%include "std_vector.i" // cXMLElement
+%include "std_map.i"
+%include "std_vector.i"
 
 %include commondefs.i
 %include "PlainMemoryManagement.i"
@@ -74,93 +74,143 @@ using namespace omnetpp;
 #define OPP_DLLEXPORT
 #define OPP_DLLIMPORT
 
-#define NAMESPACE_BEGIN
-#define NAMESPACE_END
-#define USING_NAMESPACE
-#define OPP
-
 #define _OPPDEPRECATED
 
 #pragma SWIG nowarn=516;  // "Overloaded method x ignored. Method y used."
+#pragma SWIG nowarn=822;  // "Covariant return types not supported in Java."
+#pragma SWIG nowarn=319;  // "No access specifier given for base class 'noncopyable' (ignored)."
 
-// ignore/rename some operators (some have method equivalents)
-%rename(set) operator=;
-%rename(incr) operator++;
-%ignore operator +=;
-%ignore operator [];
-%ignore operator <<;
-%ignore operator ();
-
-// ignore conversion operators (they all have method equivalents)
-%ignore operator bool;
-%ignore operator const char *;
-%ignore operator char;
-%ignore operator unsigned char;
-%ignore operator short;
-%ignore operator unsigned short;
-%ignore operator int;
-%ignore operator unsigned int;
-%ignore operator long;
-%ignore operator unsigned long;
-%ignore operator double;
-%ignore operator long double;
-%ignore operator void *;
-%ignore operator omnetpp::cOwnedObject *;
-%ignore operator omnetpp::cXMLElement *;
-%ignore omnetpp::cSimulation::operator=;
-%ignore omnetpp::cEnvir::printf;
+// forward declaration helps eliminate generating SWIGTYPE_xxx types for otherwise known classes
+namespace omnetpp {
+class cRuntimeError;
+class cModule;
+class cChannelType;
+class cCanvas;
+class cOsgCanvas;
+class cHistogram;
+class cGlobalRegistrationList;
+class cIListener;
+}
 
 // ignore methods that are useless from Java
-%ignore omnetpp::processMessage;  //cChannel
-%ignore omnetpp::cChannel::processMessage;  //cChannel
-%ignore omnetpp::netPack;
-%ignore omnetpp::netUnpack;
-%ignore omnetpp::doPacking;
-%ignore omnetpp::doUnpacking;
-%ignore omnetpp::saveToFile;
-%ignore omnetpp::loadFromFile;
-%ignore omnetpp::createWatch;
+%ignore omnetpp::cEnvir::printf;
+%ignore omnetpp::cEnvir::refOsgNode;
+%ignore omnetpp::cEnvir::unrefOsgNode;
+%ignore omnetpp::cEnvir::log;
+%ignore omnetpp::cEnvir::addLifecycleListener;
+%ignore omnetpp::cEnvir::removeLifecycleListener;
+%ignore omnetpp::cEnvir::notifyLifecycleListeners;
+%ignore omnetpp::cChannel::processMessage;
+%ignore omnetpp::cRegistrationList::begin;
+%ignore omnetpp::cRegistrationList::end;
+%ignore omnetpp::cGlobalRegistrationList::begin;
+%ignore omnetpp::cGlobalRegistrationList::end;
+
+// ignore utility functions that have no utility in Java
+%ignore omnetpp::intCastError;
 %ignore omnetpp::opp_typename;
+%ignore omnetpp::opp_appendindex;
+%ignore omnetpp::opp_demangle_typename;
+%ignore omnetpp::opp_strcmp;
+%ignore omnetpp::opp_strcpy;
+%ignore omnetpp::opp_strdup;
+%ignore omnetpp::opp_strlen;
+%ignore omnetpp::opp_strprettytrunc;
 
-// ignore non-inspectable classes and those that cause problems
-%ignore eMessageKind;
-%ignore cContextSwitcher;
-%ignore cContextTypeSwitcher;
-%ignore ModNameParamResolver;
-%ignore StringMapParamResolver;
-%ignore cStackCleanupException;
-%ignore cTerminationException;
-%ignore cEndModuleException;
-%ignore cStaticFlag;
-
+// ignore internal classes and those that cause problems
+%ignore omnetpp::CodeFragments;
+%ignore omnetpp::eMessageKind;
+%ignore omnetpp::cContextSwitcher;
+%ignore omnetpp::cContextTypeSwitcher;
+%ignore omnetpp::cStackCleanupException;
+%ignore omnetpp::cTerminationException;
+%ignore omnetpp::cEndModuleException;
+%ignore omnetpp::cStaticFlag;
+%ignore omnetpp::cOsgCanvas;
+%ignore omnetpp::cLogEntry;
 %ignore omnetpp::cGate::Desc;
 %ignore omnetpp::cChannel::MessageSentSignalValue;
 %ignore omnetpp::cChannel::result_t;
 
-%ignore omnetpp::cQueue::forEachChild;
-%ignore omnetpp::cXMLElement::forEachChild;
-%ignore omnetpp::cEventHeap::forEachChild;
-%ignore omnetpp::cObject::forEachChild;
-%ignore omnetpp::cPar::forEachChild;
-%ignore omnetpp::cComponent::forEachChild;
-%ignore omnetpp::cMessage::forEachChild;
-%ignore omnetpp::cSimulation::forEachChild;
-%ignore omnetpp::cEvent::forEachChild;
-%ignore omnetpp::cSimpleModule::forEachChild;
-%ignore omnetpp::cModule::forEachChild;
-%ignore omnetpp::cArray::forEachChild;
-%ignore omnetpp::cRegistrationList::forEachChild;
-%ignore omnetpp::cGate::forEachChild;
-%ignore omnetpp::cMsgPar::forEachChild;
-%ignore omnetpp::cDefaultList::forEachChild;
+// no long double in java
+%ignore omnetpp::cComponent::emit(omnetpp::simsignal_t, long double, omnetpp::cObject*); //TODO doesn't take effect
 
-%typemap(javacode) omnetpp::cModule %{
-  public static cEnvir ev = Simkernel.getEv();
-%};
+// ignore cFigure internal methods
+%ignore omnetpp::cFigure::updateParentTransform;
+%ignore omnetpp::cFigure::callRefreshDisplay;
+%ignore omnetpp::cFigure::getLocalChangeFlags;
+%ignore omnetpp::cFigure::getSubtreeChangeFlags;
+%ignore omnetpp::cFigure::clearChangeFlags;
+%ignore omnetpp::cFigure::refreshTagBitsRec;
+%ignore omnetpp::cFigure::getTagBits;
+%ignore omnetpp::cFigure::setTagBits;
+%ignore omnetpp::cFigure::getHash;
+%ignore omnetpp::cFigure::clearCachedHash;
 
-%typemap(javacode) omnetpp::Simkernel %{
-  public static cEnvir ev = getEv();
-%};
+// ignore internal methods
+%ignore omnetpp::cComponent::getLogLevel;
+%ignore omnetpp::cComponent::setLogLevel;
+%ignore omnetpp::cComponent::setRNGMap;
+%ignore omnetpp::cComponent::setComponentType;
+%ignore omnetpp::cComponent::addPar;
+%ignore omnetpp::cComponent::reallocParamv;
+%ignore omnetpp::cComponent::recordParameters;
+%ignore omnetpp::cComponent::recordParameterAsScalar;
+%ignore omnetpp::cComponent::parametersFinalized;
+%ignore omnetpp::cComponent::addResultRecorders;
+%ignore omnetpp::cComponent::initialized;
+%ignore omnetpp::cComponent::callRefreshDisplay;
+%ignore omnetpp::cComponent::callPreDelete;
+%ignore omnetpp::cComponent::hasDisplayString;
+%ignore omnetpp::cComponent::clearSignalState;
+%ignore omnetpp::cComponent::clearSignalRegistrations;
+%ignore omnetpp::cComponent::getSignalMask;
+%ignore omnetpp::cComponent::setCheckSignals;
+%ignore omnetpp::cComponent::getCheckSignals;
+%ignore omnetpp::cComponent::getResultRecorders;
+%ignore omnetpp::cComponent::invalidateCachedResultRecorderLists;
+
+// ignore methods of histogram strategies that are meant to be called from the owning histogram only
+%ignore omnetpp::cIHistogramStrategy::collect;
+%ignore omnetpp::cIHistogramStrategy::collectWeighted;
+%ignore omnetpp::cIHistogramStrategy::clear;
+%ignore omnetpp::cFixedRangeHistogramStrategy::collect;
+%ignore omnetpp::cFixedRangeHistogramStrategy::collectWeighted;
+%ignore omnetpp::cFixedRangeHistogramStrategy::clear;
+%ignore omnetpp::cPrecollectionBasedHistogramStrategy::collect;
+%ignore omnetpp::cPrecollectionBasedHistogramStrategy::collectWeighted;
+%ignore omnetpp::cPrecollectionBasedHistogramStrategy::clear;
+%ignore omnetpp::cAutoRangeHistogramStrategy::collect;
+%ignore omnetpp::cAutoRangeHistogramStrategy::collectWeighted;
+%ignore omnetpp::cAutoRangeHistogramStrategy::clear;
+%ignore omnetpp::cDefaultHistogramStrategy::collect;
+%ignore omnetpp::cDefaultHistogramStrategy::collectWeighted;
+%ignore omnetpp::cDefaultHistogramStrategy::clear;
+
+// ignore path figure data classes (useless due to lack of mapping the polymorphism)
+%ignore omnetpp::cPathFigure::PathItem;
+%ignore omnetpp::cPathFigure::MoveTo;
+%ignore omnetpp::cPathFigure::MoveRel;
+%ignore omnetpp::cPathFigure::LineTo;
+%ignore omnetpp::cPathFigure::LineRel;
+%ignore omnetpp::cPathFigure::HorizontalLineTo;
+%ignore omnetpp::cPathFigure::HorizontalLineRel;
+%ignore omnetpp::cPathFigure::VerticalLineTo;
+%ignore omnetpp::cPathFigure::VerticalLineRel;
+%ignore omnetpp::cPathFigure::ArcTo;
+%ignore omnetpp::cPathFigure::ArcRel;
+%ignore omnetpp::cPathFigure::CurveTo;
+%ignore omnetpp::cPathFigure::CurveRel;
+%ignore omnetpp::cPathFigure::SmoothCurveTo;
+%ignore omnetpp::cPathFigure::SmoothCurveRel;
+%ignore omnetpp::cPathFigure::CubicBezierCurveTo;
+%ignore omnetpp::cPathFigure::CubicBezierCurveRel;
+%ignore omnetpp::cPathFigure::SmoothCubicBezierCurveTo;
+%ignore omnetpp::cPathFigure::SmoothCubicBezierCurveRel;
+%ignore omnetpp::cPathFigure::ClosePath;
+
+%ignore omnetpp::cPathFigure::getNumPathItems;
+%ignore omnetpp::cPathFigure::getPathItem;
 
 %ignore omnetpp::cObject::getDescriptor;
 %ignore omnetpp::cObject::createDescriptor;
@@ -199,6 +249,8 @@ using namespace omnetpp;
 %ignore omnetpp::cModule::rng;
 %ignore omnetpp::cModule::getParentModule;
 %ignore omnetpp::cModule::getOrCreateFirstUnconnectedGatePair;
+%ignore omnetpp::cModule::getOsgCanvas;
+%ignore omnetpp::cModule::getOsgCanvasIfExists;
 
 %ignore omnetpp::cSimpleModule::pause;
 %ignore omnetpp::cSimpleModule::receive;
@@ -248,13 +300,7 @@ using namespace omnetpp;
 %ignore omnetpp::cSimulation::setContextModule;
 %ignore omnetpp::cSimulation::setContextType;
 
-%ignore omnetpp::cStatistic::getWeights; //ignore as this throws an error
-
-%ignore omnetpp::cXMLElement::getDocumentElementByPath;
-%ignore omnetpp::cXMLElement::getElementByPath;
-
 %ignore omnetpp::cObjectFactory::cObjectFactory;
-
 
 // ignore deprecated methods
 %ignore omnetpp::cChannelType::createIdealChannel;
@@ -263,6 +309,11 @@ using namespace omnetpp;
 %ignore omnetpp::cMsgPar::getAsText;
 %ignore omnetpp::cMsgPar::setFromText;
 %ignore omnetpp::cMsgPar::setFromText;
+%ignore omnetpp::cFigure::addFigureAbove;
+%ignore omnetpp::cFigure::addFigureBelow;
+%ignore omnetpp::cCanvas::addFigureAbove;
+%ignore omnetpp::cCanvas::addFigureBelow;
+%ignore omnetpp::cStatistic::getWeights;
 
 // ignore cEnvir methods that are not for model code
 %ignore omnetpp::cEnvir::disable_tracing;
@@ -316,14 +367,12 @@ using namespace omnetpp;
 %ignore omnetpp::cPar::setImpl;
 %ignore omnetpp::cPar::impl;
 %ignore omnetpp::cPar::copyIfShared;
+%ignore omnetpp::cPar::getExpression;
+%ignore omnetpp::cPar::setExpression;
 
 %ignore omnetpp::cRNG::initialize;
 %ignore omnetpp::cLCG32;
 %ignore omnetpp::cMersenneTwister;
-
-%ignore omnetpp::cXMLElement::getChildren; // we have problems with cXMLElementVector wrapping
-%ignore omnetpp::cXMLElement::getChildrenByTagName; // ditto
-%ignore omnetpp::cXMLElement::getElementsByTagName; // ditto
 
 // ignore deprecated items:
 %ignore omnetpp::cObject::info;
@@ -351,100 +400,164 @@ using namespace omnetpp;
 %ignore omnetpp::cHistogram::setCellSize;
 %ignore omnetpp::cPar::setLongValue;
 %ignore omnetpp::cPar::longValue;
+%ignore omnetpp::cGate::size;
 
 
 namespace std {
-   specialize_std_map_on_both(std::string,,,,std::string,,,);
-   //specialize_std_vector(omnetpp::cXMLElement*);
+  %define ADD_TOARRAY_METHOD(METHODNAME,CPPTYPE,JAVATYPE)
+    %typemap(javacode) vector<CPPTYPE> %{
+      public JAVATYPE[] METHODNAME() {
+        JAVATYPE[] a = new JAVATYPE[(int)size()];
+        for (int i = 0; i < a.length; i++)
+          a[i] = get(i);
+        return a;
+      }
+    %}
+  %enddef
+  ADD_TOARRAY_METHOD(toIntArray,int,int);
+  ADD_TOARRAY_METHOD(toDoubleArray,double,double);
 
-   %template(StringMap) map<string,string>;
-
-   // %ignore vector<omnetpp::cXMLElement*>::vector;
-   // %ignore vector<omnetpp::cXMLElement*>::resize;
-   // %ignore vector<omnetpp::cXMLElement*>::reserve;
-   // %ignore vector<omnetpp::cXMLElement*>::capacity;
-   // %ignore vector<omnetpp::cXMLElement*>::clear;
-   // %ignore vector<omnetpp::cXMLElement*>::add;  //XXX this one doesn't work (because it was added later in Java)
-   // %ignore vector<omnetpp::cXMLElement*>::set;
-   // %template(cXMLElementVector) vector<::omnetpp::cXMLElement*>;
-
-   // std::vector<const char*> is only used as return value --> ignore setters
-   %extend vector<const char *> {
-       const char *get(int i) {return self->at(i);}
-   }
-   %ignore vector<const char *>::vector;
-   %ignore vector<const char *>::resize;
-   %ignore vector<const char *>::reserve;
-   %ignore vector<const char *>::capacity;
-   %ignore vector<const char *>::clear;
-   %ignore vector<const char *>::add;  //XXX this one doesn't work (because it was added later in Java)
-   %ignore vector<const char *>::set;
-   %ignore vector<const char *>::get;
-   %template(StringVector) vector<const char *>;
-};
-
-%extend omnetpp::SimTime {
-   const SimTime add(const SimTime& x) {return *self + x;}
-   const SimTime substract(const SimTime& x) {return *self - x;}
-   const SimTime add(double x) {return *self + x;}
-   const SimTime substract(double x) {return *self - x;}
+  %template(IntVector) vector<int>;
+  %template(DoubleVector) vector<double>;
+  %template(CStringVector) vector<const char *>;
+  %template(StringVector) vector<string>;
+  %template(StringMap) map<string,string>;
+  %template(StringIntMap) map<string,int>;
+  %template(PointVector) vector<omnetpp::cFigure::Point>;
+  %template(ListenerVector) vector<omnetpp::cIListener*>;
+  %template(XMLElementVector) vector<omnetpp::cXMLElement*>;
 }
 
-%typemap(javacode) omnetpp::cEnvir %{
-  public void print(String s) {
-    puts(s);
-  }
-
-  public void println(String s) {
-    puts(s+"\n");
-  }
+// logging support: EV.println()
+%{
+#undef EV
+class EV {
+  public:
+    static void print(const char *s) {EV_INFO << s;}
+    static void println(const char *s) {EV_INFO << s << endl;}
+};
 %}
 
-%extend omnetpp::cEnvir
-{
-    void puts(const char *s) {printf("%s", s);}
+class EV {
+  private:
+    EV();
+  public:
+    static void print(const char *s);
+    static void println(const char *s);
 };
 
-omnetpp::cEnvir *getEv();
-%{ inline omnetpp::cEnvir *getEv() {return omnetpp::cSimulation::getActiveEnvir();} %}
+%typemap(javacode) omnetpp::cModule %{
+  public static cEnvir EV = Simkernel.getEnvir();
+  public static cEnvir ev = Simkernel.getEnvir();
+%};
+
+%extend omnetpp::cEnvir {
+  void print(const char *s) {EV_INFO << s;}
+  void println(const char *s) {EV_INFO << s << endl;}
+};
 
 // ignore/rename some operators (some have method equivalents)
-%ignore cPar::operator=;
-%rename(assign) operator=;
-%rename(plusPlus) operator++;
-%ignore operator +=;
-%ignore operator [];
-%ignore operator <<;
-%ignore operator ();
+%rename(equals) operator==;
+%ignore operator!=;
+%rename(lessThan) operator<;
+%rename(greaterThan) operator>;
+%rename(lessOrEqual) operator<=;
+%rename(greaterOrEqual) operator>=;
+
+%rename(set) operator=;
+%rename(add) operator+;
+%rename(subtract) operator-;
+%rename(mul) operator*;
+%rename(div) operator/;
+%rename(increment) operator++;
+%rename(decrement) operator--;
+
+%ignore operator+=;
+%ignore operator-=;
+%ignore operator*=;
+%ignore operator/=;
+%ignore operator[];
+%ignore operator<<;
+%ignore operator<<;
+%ignore operator();
+
+%rename(negate) omnetpp::SimTime::operator-(); // unary
+
+%extend omnetpp::SimTime {
+  SimTime add(const SimTime& x) {return *self + x;}
+  SimTime subtract(const SimTime& x) {return *self - x;}
+  SimTime mul(double x) {return *self * x;}
+  SimTime div(double x) {return *self / x;}
+  double div(const SimTime& x) {return *self / x;}
+}
+
 
 // ignore conversion operators (they all have method equivalents)
 %ignore operator bool;
-%ignore operator const char *;
 %ignore operator char;
 %ignore operator unsigned char;
+%ignore operator short;
+%ignore operator unsigned short;
 %ignore operator int;
 %ignore operator unsigned int;
 %ignore operator long;
 %ignore operator unsigned long;
+%ignore operator long long;
+%ignore operator unsigned long long;
 %ignore operator double;
 %ignore operator long double;
+%ignore operator const char *;
+%ignore operator std::string;
 %ignore operator void *;
-%ignore operator cObject *;
-%ignore operator cXMLElement *;
-%ignore cSimulation::operator=;
 
-%ignore cEnvir::printf;
-%ignore cGate::setChannel;
+%ignore operator cObject *;
+%ignore operator cOwnedObject *;
+%ignore operator cXMLElement *;
+%ignore operator Color;
+%ignore operator cFigure::Color;
+
+%ignore operator omnetpp::cObject *;
+%ignore operator omnetpp::cOwnedObject *;
+%ignore operator omnetpp::cXMLElement *;
+%ignore operator omnetpp::cFigure::Color;
+
+// remove assignment operator for some classes
+%ignore omnetpp::cPar::operator=;
+%ignore omnetpp::cSimulation::operator=;
+
+// ignore methods that are useless from Java
+%ignore omnetpp::cEnvir::printf;
+%ignore omnetpp::cEnvir::getImageSize;
+%ignore omnetpp::cEnvir::getTextExtent;
+%ignore omnetpp::cGate::setChannel;
+%ignore omnetpp::cFigure::Pixmap::buffer;
+
+// ignore internal methods:
+%ignore omnetpp::cComponent::getLogLevel;
+%ignore omnetpp::cComponent::setLogLevel;
+%ignore omnetpp::cCanvas::getAnimationSpeedMap;
+%ignore omnetpp::cCanvas::getMinAnimationSpeed;
+%ignore omnetpp::cCanvas::getAnimationHoldEndTime;
+%ignore omnetpp::cSimulation::getFingerprintCalculator;
+%ignore omnetpp::cSimulation::setFingerprintCalculator;
 
 // ignore methods that are useless from Java
 %ignore parsimPack;
 %ignore parsimUnpack;
+%ignore loadFromFile; // works with FILE*
+%ignore saveToFile; // ditto
+%ignore forEachChild;
+%ignore getThisPtr;
 
-// ignore non-inspectable and deprecated classes
-%ignore cContextSwitcher;
-%ignore cContextTypeSwitcher;
-%ignore ModNameParamResolver;
-%ignore StringMapParamResolver;
+%ignore omnetpp::cXMLElement::ParamResolver::resolve;
+%ignore omnetpp::ModNameParamResolver::resolve;
+%ignore omnetpp::StringMapParamResolver::resolve;
+
+// these methods return const char *[] which don't bother wrapping
+%ignore omnetpp::cClassDescriptor::getFieldPropertyNames;
+%ignore omnetpp::cClassDescriptor::getPropertyNames;
+%ignore omnetpp::cFigure::getAllowedPropertyKeys;
+%ignore omnetpp::cXMLElement::setAttributes;
 
 // ignore global variables but add accessors for them
 %ignore defaultList;
@@ -486,7 +599,6 @@ omnetpp::cRegistrationList *getRegisteredConfigOptions();
 
 // ignore problematic methods/class
 %ignore omnetpp::cPacketQueue;  // Java compile problems (cMessage/cPacket conversion)
-//%ignore omnetpp::cTopology; // would need to wrap its inner classes too
 
 %ignore omnetpp::critfunc_const;
 %ignore omnetpp::critfunc_depth;
@@ -494,6 +606,7 @@ omnetpp::cRegistrationList *getRegisteredConfigOptions();
 %ignore omnetpp::divfunc_babak;
 
 %ignore omnetpp::SimTime::ttoa;
+%ignore omnetpp::SimTime::split;
 %ignore omnetpp::SimTime::str(char *buf);
 %ignore omnetpp::SimTime::parse(const char *, const char *&);
 
@@ -510,13 +623,6 @@ omnetpp::cRegistrationList *getRegisteredConfigOptions();
        return self->getFieldIsCObject(field) ? (omnetpp::cObject *)self->getFieldStructValuePointer(object,field,index) : NULL;
    }
 }
-
-// prevent generating setSimulation() method
-%ignore ::simulation;
-// getSimulation is natively defined in Omnet 5.0
-//omnetpp::cSimulation *omnetpp::getSimulation();
-//%{ inline omnetpp::cSimulation *omnetpp::getSimulation() {return &(omnetpp::simulation);} %}
-
 
 // JSimpleModule
 %newobject omnetpp::JSimpleModule::retrieveMsgToBeHandled;
@@ -672,6 +778,8 @@ typedef omnetpp::SimTime simtime_t;
 %include "omnetpp/cobject.h"
 %include "omnetpp/cnamedobject.h"
 %include "omnetpp/cownedobject.h"
+%include "omnetpp/ccanvas.h"
+//%include "omnetpp/cosgcanvas.h"
 %include "omnetpp/cdefaultlist.h"
 %include "omnetpp/clistener.h"
 %include "omnetpp/ccomponent.h"
@@ -689,6 +797,7 @@ typedef omnetpp::SimTime simtime_t;
 %include "omnetpp/cstatistic.h"
 %include "omnetpp/cstddev.h"
 %include "omnetpp/cabstracthistogram.h"
+%include "omnetpp/chistogramstrategy.h"
 %include "omnetpp/chistogram.h"
 //%include "omnetpp/cksplit.h"
 %include "omnetpp/cpsquare.h"

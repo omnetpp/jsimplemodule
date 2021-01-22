@@ -120,8 +120,12 @@ sub toJNI()
     return $a."Ljava/lang/String;" if ($t eq "String");
     return $a."Ljava/lang/Object;" if ($t eq "Object");
     return $a."Ljava/math/BigInteger;" if ($t eq "BigInteger");
-    return $a."Ljava/math/BigInteger;" if ($t eq "java.math.BigInteger");
-    $t =~ tr/./$/; # for inner classes, e.g. cHistogram$Bin
-    return $a."Lorg/omnetpp/simkernel/$t;";
+    if ($t =~ /^[A-Z]/ || $t =~ /^c[A-Z]/) {  # looks like an unqualified class name
+        $t =~ tr/./$/; # inner class
+        return $a."Lorg/omnetpp/simkernel/$t;";
+    } else {
+        $t =~ tr|.|/|;
+        return $a."L$t;";
+    }
 }
 
