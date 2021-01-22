@@ -18,7 +18,7 @@ public class Fifo extends JSimpleModule
         qlenVector = new cOutVector("queue length");
 
         // add some jobs to the queue
-        int n = getParentModule().par("queueNumInitialJobs").longValue();
+        int n = (int)getParentModule().par("queueNumInitialJobs").intValue();
         for (int i=0; i<n; i++) {
             cMessage msg = new cMessage("job-"+i);
             msg.setTimestamp();

@@ -22,7 +22,7 @@ public class Source extends JSimpleModule {
         send(hello, "out");
 
         ev.println("scheduling next send");
-        scheduleAt(simTime().add(new SimTime(Simkernel.exponential(1))), msg);
+        scheduleAt(simTime().add(new SimTime(exponential(1))), msg);
     }
 
     protected void finish() {

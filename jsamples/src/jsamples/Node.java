@@ -12,17 +12,17 @@ public class Node extends JSimpleModule {
     }
 
     protected void handleMessage(cMessage msg) {
-        if (msg.getClassName().equals("IPHeader")) {
+        if (msg.getClassName().equals("example::NetworkPacket")) {
             ev.println("source=" + msg.getField("source"));
             ev.println("destination=" + msg.getField("destination"));
-            ev.println("extrainfo=" + msg.getField("extrainfo"));
+            ev.println("payload=" + msg.getField("payload"));
         }
         msg.delete();
 
-        cMessage pk = cMessage.cast(cObjectFactory.createOne("IPHeader"));
+        cMessage pk = cMessage.cast(cObjectFactory.createOne("example::NetworkPacket"));
         pk.setField("source", "1");
         pk.setField("destination", "2");
-        pk.setField("extrainfo", "bla");
+        pk.setField("payload", "0100100011110101010101101110101001011111010101101010101100...");
         send(pk, "out");
     }
 }
