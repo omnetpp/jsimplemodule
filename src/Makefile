@@ -43,7 +43,6 @@ DIST_SRC_FILES = \
     Reflection.i \
     Simkernel.i \
     registernatives.pl \
-    innerclasses.h \
     JMessage.cc \
     JMessage.h \
     JSimpleModule.cc \

@@ -76,7 +76,7 @@
   private long swigCPtr;
 
   protected $javaclassname(long cPtr, boolean dummy) {
-    super(SimkernelJNI.SWIG$javaclassnameUpcast(cPtr), false);
+    super(SimkernelJNI.$javaclassname_SWIGUpcast(cPtr), false);
     swigCPtr = cPtr;
   }
 
@@ -86,7 +86,7 @@
 
   protected void setCPtr(long cPtr) {
     swigCPtr = cPtr;
-    super.setCPtr(cPtr==0 ? 0 : SimkernelJNI.SWIG$javaclassnameUpcast(cPtr));
+    super.setCPtr(cPtr==0 ? 0 : SimkernelJNI.$javaclassname_SWIGUpcast(cPtr));
   }
 %}
 

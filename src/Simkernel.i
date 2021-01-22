@@ -30,7 +30,6 @@
 
 %{
 #include <omnetpp.h>
-#include "innerclasses.h"
 #include "JSimpleModule.h"
 #include "JMessage.h"
 
@@ -648,8 +647,6 @@ DERIVEDCLASS(omnetpp::cProperty, omnetpp::cObject);
 %ignore omnetpp::JMessage::operator=(const JMessage&);
 
 typedef omnetpp::SimTime simtime_t;
-
-%include "innerclasses.h"
 
 %include "omnetpp/simkerneldefs.h"
 %include "omnetpp/simtime.h"
