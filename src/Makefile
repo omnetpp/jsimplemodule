@@ -62,7 +62,7 @@ EXPERIMENTAL_SRC_FILES = \
 all: dist
 
 # Use SWIG and scripts to generate C++ files (and Java interface files)
-$(GENERATED_FILES) : Simkernel.i Makefile $(OMNETPP_ROOT)/include/*.h  # and many oher things
+$(GENERATED_FILES) : Makefile *.i $(OMNETPP_ROOT)/include/*.h  # and many oher things
 	-mkdir -p $(OUTDIR)/java
 	-mkdir -p $(OUTDIR)/java/org
 	-mkdir -p $(OUTDIR)/java/org/omnetpp
