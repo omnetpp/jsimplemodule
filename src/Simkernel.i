@@ -640,10 +640,12 @@ omnetpp::cRegistrationList *getRegisteredConfigOptions();
   }
 
   protected int numInitStages() {
+    // can be overridden by the user
     return 1;
   }
 
   protected void initialize(int stage) {
+    // can be overridden by the user
     if (stage==0)
       initialize();
   }
@@ -659,6 +661,10 @@ omnetpp::cRegistrationList *getRegisteredConfigOptions();
 
   protected void handleMessage(cMessage msg) {
     error("handleMessage() should be overridden in module classes");
+  }
+
+  protected void refreshDisplay() {
+    // can be overridden by the user
   }
 
   protected void finish() {

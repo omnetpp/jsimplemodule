@@ -92,6 +92,7 @@ void JSimpleModule::createJavaModuleObject()
     numInitStagesMethod = findMethod(clazz, clazzName, "numInitStages", "()I");
     initializeStageMethod = findMethod(clazz, clazzName, "initialize", "(I)V");
     doHandleMessageMethod = findMethod(clazz, clazzName, "doHandleMessage", "()V");
+    refreshDisplayMethod = findMethod(clazz, clazzName, "refreshDisplay", "()V");
     finishMethod = findMethod(clazz, clazzName, "finish", "()V");
 
     // create Java module object
@@ -121,6 +122,12 @@ void JSimpleModule::handleMessage(cMessage *msg)
 {
     msgToBeHandled = msg;
     jenv->CallVoidMethod(javaPeer, doHandleMessageMethod);
+    checkExceptions();
+}
+
+void JSimpleModule::refreshDisplay() const
+{
+    jenv->CallVoidMethod(javaPeer, refreshDisplayMethod);
     checkExceptions();
 }
 

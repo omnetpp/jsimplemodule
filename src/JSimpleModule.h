@@ -53,6 +53,7 @@ class JSimpleModule : public cSimpleModule, public JObjectAccess
     jmethodID numInitStagesMethod;
     jmethodID initializeStageMethod;
     jmethodID doHandleMessageMethod;
+    jmethodID refreshDisplayMethod;
     jmethodID finishMethod;
     cMessage *msgToBeHandled;
 
@@ -74,6 +75,7 @@ class JSimpleModule : public cSimpleModule, public JObjectAccess
     virtual int numInitStages() const;
     virtual void initialize(int stage);
     virtual void handleMessage(cMessage *msg);
+    virtual void refreshDisplay() const;
     virtual void finish();
 };
 
