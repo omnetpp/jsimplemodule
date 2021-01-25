@@ -99,15 +99,17 @@
 
 %typemap(javadestruct, methodname="delete", methodmodifiers="public") SWIGTYPE {
     if (swigCPtr != 0) {
+      if (true)
+         $jnicall;
       setCPtr(0);
-      $jnicall;
     }
   }
 
 %typemap(javadestruct_derived, methodname="delete", methodmodifiers="public") SWIGTYPE {
     if (swigCPtr != 0) {
+      if (true)
+         $jnicall;
       setCPtr(0);
-      $jnicall;
     }
   }
 
