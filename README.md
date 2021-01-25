@@ -8,7 +8,7 @@ then it was part of the OMNeT++ 4.0 through 4.6. It lives on as a separate proje
 IMPORTANT:
 
 - Any particular JSimpleModule version is tied to a specific OMNeT++ release.
-  You should always use matching versions. THE CURRENT MASTER IS FOR OMNeT++ 4.6.
+  You should always use matching versions.
 
 - Use a released JSimpleModule version if you can. If you check out the repo instead,
   you need to build it (see the `src/` folder) before use.
