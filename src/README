@@ -1,1 +1,12 @@
-Type "make dist" to create....
+Build Instructions
+------------------
+
+Type "make dist" to build and copy the C++ and JAR files into
+the ../jsimple directory.
+
+SWIG compatibility: 3.x and 4.x (versions 3.0.12 and 4.0.2 were tested).
+
+If you have SWIG 4.x, add SWIG=swig -doxygen to the Makefile to let SWIG
+transfer the C++ documentation comments into the generated Java sources.
+SWIG 4.0.2 has some problem with stray "<" signs in the comments (it exits
+with an error); you can fix those by escaping "<" with backslash.
